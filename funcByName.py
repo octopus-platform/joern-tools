@@ -1,6 +1,5 @@
 #!/usr/bin/env python2
 
-from py2neo import neo4j, gremlin
 import sys, os
 from joern.all import JoernSteps
 
