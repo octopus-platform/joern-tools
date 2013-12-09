@@ -26,4 +26,4 @@ if __name__ == '__main__':
     
     y = j.runGremlinQuery(cmd)
     for x in y:
-        print '%s,%s,%s' % tuple(x)
+        print '%s\t%s\t%s' % tuple(x)
