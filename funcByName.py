@@ -10,6 +10,7 @@ def usage():
 if __name__ == '__main__':
 
     j = JoernSteps()
+    j.connectToDatabase()
     
     if len(sys.argv) == 2:
         luceneQuery = sys.argv[1]
@@ -24,6 +25,6 @@ if __name__ == '__main__':
     .transform{ [name,fname, loc] }.toList()
     """
     
-    y = j.executeGremlinCmd(cmd)
+    y = j.runGremlinQuery(cmd)
     for x in y:
         print '%s,%s,%s' % tuple(x)
