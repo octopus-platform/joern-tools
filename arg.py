@@ -15,8 +15,17 @@ if __name__ == '__main__':
         usage()
         sys.exit()
 
-    query = """ getArgumentNTo("%s", "%d").code """ % (sys.argv[1], int(sys.argv[2]) - 1)
+    query = """
+    getArgumentNTo("%s", "%d")
+    .sideEffect{ code = it.code; loc = it.location; }
+    .astNodeToFunction
+    .sideEffect{funcName = it.functionName;}
+    .functionToFile
+    .sideEffect{ filename = it.filepath; }
+    .transform{ [code, funcName, filename, loc] }
+
+""" % (sys.argv[1], int(sys.argv[2]) - 1)
     
     y = j.runGremlinQuery(query)
     for x in y:
-        print x
+        print '%s\t%s\t%s\t%s' % tuple(x)

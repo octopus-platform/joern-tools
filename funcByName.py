@@ -21,7 +21,7 @@ if __name__ == '__main__':
     cmd += """
     .sideEffect{ name = it.functionName; loc = it.location; }
     .functionToFile().sideEffect{fname = it.filepath }
-    .transform{ [name,fname, loc] }.toList()
+    .transform{ [name,fname, loc] }
     """
     
     y = j.runGremlinQuery(cmd)
