@@ -2,21 +2,7 @@
 
 import sys, argparse
 from joern.all import JoernSteps
-
-class ParseLocationString(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-        
-        try:
-            (filename,a,b,startIndex,stopIndex) = values.split(':')
-            startIndex = int(startIndex)
-            stopIndex = int(stopIndex)
-        except ValueError:
-            parser.error("invalid location string")
-        
-        setattr(namespace, 'filename', filename)
-        setattr(namespace, 'startIndex', startIndex)
-        setattr(namespace, 'stopIndex', stopIndex)
-        
+from ParseLocationString import ParseLocationString
 
 class CLI():
     def __init__(self):
