@@ -14,6 +14,7 @@ class ParseLocationString(argparse.Action):
             parser.error("invalid location string")
         
         setattr(namespace, 'filename', filename)
+        setattr(namespace, 'location', '%d:%d:%d:%d' % (startLine, stopLine, startIndex, stopIndex))
         setattr(namespace, 'startLine', startLine)
         setattr(namespace, 'stopLine', stopLine)
         setattr(namespace, 'startIndex', startIndex)
