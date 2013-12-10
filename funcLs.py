@@ -14,8 +14,10 @@ class CLI():
         For a location pointing to a function, list different
         properties of the function such as callees, type or symbol
         usage. By default, output the function signature.""")
- 
-    
+     
+        self.argParser.add_argument('-c', '--calls',
+            action='store_true', help='list calls.')
+        
     def _parseCommandLine(self):
         self.args = self.argParser.parse_args()
 
@@ -32,8 +34,12 @@ class CLI():
             
             query = """getFunctionByFilenameAndLoc("%s","%s")
             """ % (filename, location) 
-        
-            query += '.signature'
+            
+            if self.args.calls:
+                query += """ .id.transform{ "type:CallExpression AND functionId: " + it}
+                .queryToNodes().code"""
+            else:
+                query += '.signature'
             
             y = j.runGremlinQuery(query)
             for z in y:
