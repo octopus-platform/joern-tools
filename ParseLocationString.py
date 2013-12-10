@@ -1,12 +1,12 @@
 
-import argparse
+import argparse, sys
 
 def parseLocationOrFail(line):
     try:
-        x = parseLocationString(line[:-1])
+        x = parseLocationString(line)
+        (filename, startLine, startPos, startIndex, stopIndex) = x
     except ValueError:
         print 'Invalid location line.'
-        self.usage()
         sys.exit()
     return x
 

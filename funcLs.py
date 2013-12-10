@@ -2,7 +2,7 @@
 
 import sys, argparse
 from joern.all import JoernSteps
-from ParseLocationString import parseLocationString
+from ParseLocationString import parseLocationOrFail
 
 class CLI():
     def __init__(self):
@@ -25,23 +25,19 @@ class CLI():
         j.connectToDatabase()
         
         for line in sys.stdin:
-            try:
-                (filename, startLine, stopLine, startIndex, stopIndex)\
-                    = parseLocationString(line[:-1])
-            except ValueError:
-                print 'Invalid location line.'
-                self.usage()
-                sys.exit()
-
-            query = """
-            getFunctionByFilenameAndLoc("%s","%s")
+            
+            x = parseLocationOrFail(line[:-1])
+            filename = x[0]
+            location = "%s:%s:%s:%s" % tuple(x[1:])
+            
+            query = """getFunctionByFilenameAndLoc("%s","%s")
             """ % (filename, location) 
         
             query += '.signature'
-
+            
             y = j.runGremlinQuery(query)
-            for x in y:
-                print x
+            for z in y:
+                print z
 
 if __name__ == '__main__':
     cli = CLI()
