@@ -22,14 +22,14 @@ class ParseLocationString(argparse.Action):
         
         try:
             parsedLine = parseLocationString(values)
-            (filename, startLine, stopLine, startIndex, stopIndex) = parsedLine
+            (filename, startLine, startPos, startIndex, stopIndex) = parsedLine
         except ValueError:
             parser.error("invalid location string")
         
         setattr(namespace, 'filename', filename)
         setattr(namespace, 'location', '%d:%d:%d:%d' % tuple(parsedLine[1:]) )
         setattr(namespace, 'startLine', startLine)
-        setattr(namespace, 'stopLine', stopLine)
+        setattr(namespace, 'startPos', startPos)
         setattr(namespace, 'startIndex', startIndex)
         setattr(namespace, 'stopIndex', stopIndex)
         

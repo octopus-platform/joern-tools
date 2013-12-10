@@ -17,10 +17,7 @@ class CLI():
     def _parseCommandLine(self):
         self.args = self.argParser.parse_args()
 
-    def usage(self):
-        self.argParser.print_help()
-    
-    def openFileOrFail(self, filename):
+    def _openFileOrFail(self, filename):
         try:
             f = file(filename)
         except IOError:
@@ -29,17 +26,20 @@ class CLI():
             sys.exit()
         return f
 
+    def _extractContent(self, f, startIndex, stopIndex):
+        f.seek(startIndex)
+        content = f.read(stopIndex - startIndex + 1)
+        f.close()
+        return content
 
     def run(self):
-     
+        
         for line in sys.stdin:
             (filename, startLine, startPos, startIndex, stopIndex)\
                 = parseLocationOrFail(line)
                                                                     
-            f = self.openFileOrFail(filename)
-            f.seek(startIndex)
-            content = f.read(stopIndex - startIndex + 1)
-            f.close()
+            f = self._openFileOrFail(filename)
+            content = self._extractContent(f, startIndex, stopIndex)
             print content
 
 if __name__ == '__main__':
