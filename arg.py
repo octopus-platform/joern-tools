@@ -11,7 +11,7 @@ class CLI():
     def _initializeOptParser(self):
         self.argParser = argparse.ArgumentParser(description =\
         "Returns all n'th arguments of calls to the specified\
-        callee. Accepts callee TAB n lines on stdin.") 
+        callee. Accepts callee TAB $i lines on stdin where $i is the argument index.") 
         self.argParser.add_argument('-s', '--symbols',
         action='store_true', help='return symbols used rather than\
         code.')
@@ -20,7 +20,7 @@ class CLI():
         self.args = self.argParser.parse_args()
         
     def usage(self):
-        print ('"callee TAB n" lines required')
+        print ('"callee TAB $i" lines required.')
         
 
     def run(self):
