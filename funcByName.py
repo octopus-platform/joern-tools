@@ -11,19 +11,17 @@ if __name__ == '__main__':
     j = JoernSteps()
     j.connectToDatabase()
     
-    if len(sys.argv) == 2:
-        luceneQuery = sys.argv[1]
+    for line in sys.stdin:
+        luceneQuery = line[:-1]
         cmd = "queryNodeIndex('functionName:%s')" % (luceneQuery)
-    else:
-        usage()
-        sys.exit()
-
-    cmd += """
-    .sideEffect{ name = it.functionName; loc = it.location; }
-    .functionToFile().sideEffect{fname = it.filepath }
-    .transform{ [name,fname, loc] }
-    """
     
-    y = j.runGremlinQuery(cmd)
-    for x in y:
-        print '%s\t%s\t%s' % tuple(x)
+
+        cmd += """
+        .sideEffect{ name = it.functionName; loc = it.location; }
+        .functionToFile().sideEffect{fname = it.filepath }
+        .transform{ [name,fname, loc] }
+        """
+    
+        y = j.runGremlinQuery(cmd)
+        for x in y:
+            print '%s\t%s\t%s' % tuple(x)
