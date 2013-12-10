@@ -1,6 +1,15 @@
 
 import argparse
 
+def parseLocationOrFail(line):
+    try:
+        x = parseLocationString(line[:-1])
+    except ValueError:
+        print 'Invalid location line.'
+        self.usage()
+        sys.exit()
+    return x
+
 def parseLocationString(values):
     x = values.split(':')
     for i in range(1,len(x)):

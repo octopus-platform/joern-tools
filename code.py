@@ -2,7 +2,7 @@
 
 import sys, argparse
 from joern.all import JoernSteps
-from ParseLocationString import parseLocationString
+from ParseLocationString import parseLocationOrFail
 
 class CLI():
     def __init__(self):
@@ -23,28 +23,20 @@ class CLI():
     def run(self):
      
         for line in sys.stdin:
+            (filename, startLine, stopLine, startIndex, stopIndex)\
+                = parseLocationOrFail(line)
+                                                                    
             try:
-                (filename, startLine, stopLine, startIndex, stopIndex)\
-                    = parseLocationString(line[:-1])
-            except ValueError:
-                print 'Invalid location line.'
-                self.usage()
+                f = file(filename)
+            except IOError:
+                sys.stderr.write('Error: %s: no such file or directory\n'
+                                 % filename)
                 sys.exit()
-                
-        try:
-            f = file(filename)
-        except IOError:
-            sys.stderr.write('Error: %s: no such file or directory\n'
-                             % filename)
-            sys.exit()
 
-        
-
-        f.seek(startIndex)
-        content = f.read(stopIndex - startIndex + 1)
-        f.close()
-        
-        print content
+            f.seek(startIndex)
+            content = f.read(stopIndex - startIndex + 1)
+            f.close()
+            print content
 
 if __name__ == '__main__':
     cli = CLI()
