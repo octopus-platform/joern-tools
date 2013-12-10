@@ -2,7 +2,7 @@
 
 import sys, argparse
 from joern.all import JoernSteps
-from ParseLocationString import ParseLocationString
+from ParseLocationString import parseLocationString
 
 class CLI():
     def __init__(self):
@@ -10,27 +10,38 @@ class CLI():
         self._parseCommandLine()
     
     def _initializeOptParser(self):
-        self.argParser = argparse.ArgumentParser(description =\
-        "Print code at given file and location where location is\
-        filename:startLine:stopLine:startIndex:stopIndex as saved in\
-        the location attribute of database nodes.")
- 
-        self.argParser.add_argument('location', action=ParseLocationString)
+        self.argParser = argparse.ArgumentParser(description = """
+        Read filename:startLine:stopLine:startIndex:stopIndex from
+        standard input and output the respective code.""")
         
     def _parseCommandLine(self):
         self.args = self.argParser.parse_args()
 
+    def usage(self):
+        self.argParser.print_help()
+
     def run(self):
      
+        for line in sys.stdin:
+            try:
+                (filename, startLine, stopLine, startIndex, stopIndex)\
+                    = parseLocationString(line[:-1])
+            except ValueError:
+                print 'Invalid location line.'
+                self.usage()
+                sys.exit()
+                
         try:
-            f = file(self.args.filename)
+            f = file(filename)
         except IOError:
             sys.stderr.write('Error: %s: no such file or directory\n'
-                             % self.args.filename)
+                             % filename)
             sys.exit()
 
-        f.seek(self.args.startIndex)
-        content = f.read(self.args.stopIndex - self.args.startIndex + 1)
+        
+
+        f.seek(startIndex)
+        content = f.read(stopIndex - startIndex + 1)
         f.close()
         
         print content
