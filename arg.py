@@ -18,8 +18,9 @@ if __name__ == '__main__':
     query = """
     getArgumentNTo("%s", "%d")
     .sideEffect{ code = it.code;}
-    .astNodeToBasicBlockRoot()
+    .astNodeToBasicBlock()
     .sideEffect{loc = it.location; }
+    .back(2)
     .astNodeToFunction
     .sideEffect{funcName = it.functionName;}
     .functionToFile
