@@ -34,7 +34,7 @@ class CLI():
         """ % (sys.argv[1], int(sys.argv[2]) - 1)
 
         if self.args.symbols:
-            query += """.astNodeToSymbolsUsed().sideEffect{sym = it.code;
+            query += """.astNodeToSymbolsUsed().sideEffect{code = it.code;
             }.transform{ node } """
         
         query += """
