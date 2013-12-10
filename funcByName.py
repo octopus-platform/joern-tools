@@ -14,8 +14,6 @@ if __name__ == '__main__':
     for line in sys.stdin:
         luceneQuery = line[:-1]
         cmd = "queryNodeIndex('functionName:%s')" % (luceneQuery)
-    
-
         cmd += """
         .sideEffect{ name = it.functionName; loc = it.location; }
         .functionToFile().sideEffect{fname = it.filepath }
