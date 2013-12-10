@@ -21,7 +21,6 @@ class CLI():
         
     def usage(self):
         print ('"callee TAB $i" lines required.')
-        
 
     def run(self):
         
@@ -29,31 +28,41 @@ class CLI():
         j.connectToDatabase()
         
         for line in sys.stdin:
-            try:
-                (callee, n) = line.split('\t')
-            except ValueError:
-                self.usage()
-                sys.exit()
-                
-            query = """
-            getArgumentNTo("%s", "%d")
-            .sideEffect{ code = it.code; node = it; }
-            .astNodeToBasicBlock()
-            .sideEffect{loc = it.location;}.transform{ node }
-            """ % (callee, int(n) - 1)
-
-            if self.args.symbols:
-                query += """.astNodeToSymbolsUsed().sideEffect{code = it.code;
-                }.transform{ node } """
-        
-            query += """
-            .functionAndFilename().sideEffect{ (funcName, filename) = it }
-            .transform{ [code, funcName, filename, loc] }
-            """ 
+            query = self._constructQueryForLine(line)
     
             y = j.runGremlinQuery(query)
             for x in y:
                 print '%s\t%s\t%s\t%s' % tuple(x)
+
+    def _constructQueryForLine(self, line):
+        
+        (callee, i) = self._readCalleeAndIOrFail(line[:-1])
+
+        query = """
+        getArgumentNTo("%s", "%d")
+        .sideEffect{ code = it.code; node = it; }
+        .astNodeToBasicBlock()
+        .sideEffect{loc = it.location;}.transform{ node }
+        """ % (callee, i)
+        
+        if self.args.symbols:
+            query += """.astNodeToSymbolsUsed().sideEffect{code = it.code;
+            }.transform{ node } """
+            
+        query += """
+        .functionAndFilename().sideEffect{ (funcName, filename) = it }
+        .transform{ [code, funcName, filename, loc] }
+        """ 
+        return query
+        
+    def _readCalleeAndIOrFail(self, line):
+        try:
+            (callee, i) = line.split('\t')
+            i = int(i) - 1
+        except ValueError:
+            self.usage()
+            sys.exit()
+        return (callee, i)
 
 if __name__ == '__main__':
     cli = CLI()
