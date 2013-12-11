@@ -1,23 +1,20 @@
 #!/usr/bin/env python2
 
-import sys, argparse
+import sys
 from joern.all import JoernSteps
 from PipeTool import PipeTool
 
-DESCRIPTION = """
-Returns all n'th arguments of calls to the specified callee. Accepts
-callee TAB $i lines on stdin where $i is the argument index.""" 
+DESCRIPTION = """ Returns all n'th arguments of calls to the specified
+callee. Accepts callee TAB $i lines on stdin where $i is the argument
+index."""
 
-class CLI(PipeTool):
+class ArgTool(PipeTool):
     def __init__(self):
         PipeTool.__init__(self, DESCRIPTION)
 
         self.argParser.add_argument('-s', '--symbols',
-                                    action='store_true', help='return symbols used rather than code.')
-        
-    def usage(self):
-        print ('"callee TAB $i" lines required.')
-
+                                    action='store_true', help='return\
+                                    symbols used rather than code.')
     # @Override
     def streamStart(self):
         self.j = JoernSteps()
@@ -57,11 +54,10 @@ class CLI(PipeTool):
             (callee, i) = line.split('\t')
             i = int(i) - 1
         except ValueError:
-            self.usage()
+            self.argParser.print_help()
             sys.exit()
         return (callee, i)
 
 if __name__ == '__main__':
-    cli = CLI()
-    cli.run()
-
+    tool = ArgTool()
+    tool.run()
