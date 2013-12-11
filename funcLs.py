@@ -5,17 +5,13 @@ from joern.all import JoernSteps
 from ParseLocationString import parseLocationOrFail
 from PipeTool import PipeTool
 
-DESCRIPTION = """For a location pointing to a function, list
-different properties of the function such as callees, type or symbol
-usage. By default, output the function signature."""
+DESCRIPTION = """List the contents of a function. Expects
+filename:startLine:startPos:startIndex:stopIndex lines"""
 
 class FuncLs(PipeTool):
     
     def __init__(self):
         PipeTool.__init__(self, DESCRIPTION)
-        
-        self.argParser.add_argument('-c', '--calls',
-                action='store_true', help='list calls.')
     
     # @Override
     def streamStart(self):
@@ -30,21 +26,16 @@ class FuncLs(PipeTool):
             
         query = """getFunctionByFilenameAndLoc("%s","%s")
         .sideEffect{ funcName = it.functionName; funcLoc = it.location }
-        """ % (filename, location) 
-            
-        if self.args.calls:
-            query += """.id.transform{ "type:CallExpression AND functionId: " + it}
-            .queryToNodes().outE().filter{it.n == '0'}.inV().sideEffect{callee = it.code;}
-            .astNodeToBasicBlock().sideEffect{loc = it.location}.id
-            .transform{ [funcName, "%s", funcLoc, loc, callee] }
-            """ % (filename)
-            y = self.j.runGremlinQuery(query)
-            for z in y: print '%s\t%s\t%s\t%s\t%s' % tuple(z)
-        else:
-            query += '.transform{ [funcName, "%s", funcLoc, it.signature] }' % (filename)
-            y = self.j.runGremlinQuery(query)
-            for z in y:
-                print '%s\t%s\t%s\t%s' % tuple(z)
+        .id.transform{ "functionId: " + it}
+        .queryToNodes()
+        .transform{ ["%s", funcLoc, funcName, it.type, it.code] }
+        
+        """ % (filename, location, filename) 
+        
+        y = self.j.runGremlinQuery(query)
+        for z in y:
+            print '%s:%s\t%s\t%s\t%s' % tuple(z)
+        
 
 if __name__ == '__main__':
     tool= FuncLs()
