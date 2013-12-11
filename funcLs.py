@@ -33,17 +33,22 @@ class CLI():
             location = "%s:%s:%s:%s" % tuple(x[1:])
             
             query = """getFunctionByFilenameAndLoc("%s","%s")
+            .sideEffect{ funcName = it.functionName; funcLoc = it.location }
             """ % (filename, location) 
             
             if self.args.calls:
-                query += """ .id.transform{ "type:CallExpression AND functionId: " + it}
-                .queryToNodes().code"""
+                query += """.id.transform{ "type:CallExpression AND functionId: " + it}
+                .queryToNodes().outE().filter{it.n == '0'}.inV().sideEffect{callee = it.code;}
+                .astNodeToBasicBlock().sideEffect{loc = it.location}.id
+                .transform{ [funcName, "%s", funcLoc, loc, callee] }
+                """ % (filename)
+                y = j.runGremlinQuery(query)
+                for z in y: print '%s\t%s\t%s\t%s\t%s' % tuple(z)
             else:
-                query += '.signature'
-            
-            y = j.runGremlinQuery(query)
-            for z in y:
-                print z
+                query += '.transform{ [funcName, "%s", funcLoc, it.signature] }' % (filename)
+                y = j.runGremlinQuery(query)
+                for z in y:
+                    print '%s\t%s\t%s\t%s' % tuple(z)
 
 if __name__ == '__main__':
     cli = CLI()
