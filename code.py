@@ -3,19 +3,25 @@
 import sys, argparse
 from joern.all import JoernSteps
 from ParseLocationString import parseLocationOrFail
+from PipeTool import PipeTool
 
-class CLI():
-    def __init__(self):
-        self._initializeOptParser()
-        self._parseCommandLine()
+DESCRIPTION = """Read filename:startLine:startPos:startIndex:stopIndex
+from standard input and output the respective code."""
+
+class CodeTool(PipeTool):
     
-    def _initializeOptParser(self):
-        self.argParser = argparse.ArgumentParser(description = """
-        Read filename:startLine:startPos:startIndex:stopIndex from
-        standard input and output the respective code.""")
+    def __init__(self):
+        PipeTool.__init__(self)
+        self.setDescription(DESCRIPTION)
+
+    "@Override"
+    def processLine(self, line):
+        (filename, startLine, startPos, startIndex, stopIndex)\
+            = parseLocationOrFail(line)
         
-    def _parseCommandLine(self):
-        self.args = self.argParser.parse_args()
+        f = self._openFileOrFail(filename)
+        content = self._extractContent(f, startIndex, stopIndex)
+        print content
 
     def _openFileOrFail(self, filename):
         try:
@@ -25,23 +31,13 @@ class CLI():
                              % filename)
             sys.exit()
         return f
-
+        
     def _extractContent(self, f, startIndex, stopIndex):
         f.seek(startIndex)
         content = f.read(stopIndex - startIndex + 1)
         f.close()
-        return content
-
-    def run(self):
-        
-        for line in sys.stdin:
-            (filename, startLine, startPos, startIndex, stopIndex)\
-                = parseLocationOrFail(line)
-                                                                    
-            f = self._openFileOrFail(filename)
-            content = self._extractContent(f, startIndex, stopIndex)
-            print content
+        return content        
 
 if __name__ == '__main__':
-    cli = CLI()
-    cli.run()
+    tool = CodeTool()
+    tool.run()
