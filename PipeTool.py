@@ -8,25 +8,37 @@ from argparse import ArgumentParser, FileType
 
 class PipeTool():
     
-    def __init__(self):
-        self._initializeDefaults()
-    
-    def _initializeDefaults(self):
-        self.description = ""
-        
-    def setDescription(self, description):
+    def __init__(self, description):
         self.description = description
+        self._initializeOptParser()
+        
+    def _initializeOptParser(self):
+        self.argParser = ArgumentParser(description = self.description)
+        
+        self.argParser.add_argument('-f', '--file', nargs='?',
+                                    type = FileType('r'), default=sys.stdin,
+                                    help='read input from the provided file')
     
     def run(self):
-        """ Run the pipe tool. Call this function once all settings
-        have been made. """
-        self._initialize()
+        """ Run the pipe tool. Call this function once all additional
+        arguments have been provided """
+        self._parseCommandLine()
 
         if self.args.file != sys.stdin or not sys.stdin.isatty():
             self._processStream()
         else:
             self._usage()
     
+    def _parseCommandLine(self):
+        self.args = self.argParser.parse_args()
+        
+    
+    def _processStream(self):
+        self.streamStart()
+        for line in self.args.file:
+            self.processLine(line[:-1])
+        self.streamEnd()
+
     def processLine(self, line):
         """ This function is called for each line read from the input
         source. Note that the newline character has already been
@@ -34,31 +46,21 @@ class PipeTool():
         implement your tool"""
         print line
 
-    def _initialize(self):
-        self._initializeOptParser()
-        self._parseCommandLine()
-    
-    def _initializeOptParser(self):
-        self.argParser = ArgumentParser(description = self.description)
-        
-        self.argParser.add_argument('-f', '--file', nargs='?',
-                                    type = FileType('r'), default=sys.stdin,
-                                    help='read input from the provided file')
-        
-    def _parseCommandLine(self):
-        self.args = self.argParser.parse_args()
-        
-    
-    def _processStream(self):
-        for line in self.args.file:
-            self.processLine(line[:-1])
-        
+    def streamStart(self):
+        """ Called when before reading the first item from the
+        stream. Override."""
+        pass
+            
+    def streamEnd(self):
+        """ Called after reading the last item from the
+        stream. Override."""
+        pass
+
     def _usage(self):
         self.argParser.print_help()
 
-
 if __name__ == '__main__':
     
-    tool = PipeTool()
+    tool = PipeTool("foo")
     tool.run()
     

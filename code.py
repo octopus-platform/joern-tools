@@ -11,10 +11,9 @@ from standard input and output the respective code."""
 class CodeTool(PipeTool):
     
     def __init__(self):
-        PipeTool.__init__(self)
-        self.setDescription(DESCRIPTION)
+        PipeTool.__init__(self, DESCRIPTION)
 
-    "@Override"
+    # @Override
     def processLine(self, line):
         (filename, startLine, startPos, startIndex, stopIndex)\
             = parseLocationOrFail(line)
