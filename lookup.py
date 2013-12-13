@@ -19,7 +19,7 @@ class Lookup(PipeTool):
     def processLine(self, line):
         (nodeType, code) = line.split('\t')
         
-        query = """ queryNodeIndex('type:%s AND code:"%s"')""" % (nodeType, code)
+        query = """queryNodeIndex('type:%s AND code:"%s"')""" % (nodeType, code)
         query += """
         .astNodeToFunction().sideEffect{ loc = it.location; name = it.functionName}
         .functionToFile().sideEffect{filename = it.filepath}
