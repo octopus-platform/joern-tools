@@ -28,13 +28,13 @@ class FuncLs(PipeTool):
         .sideEffect{ funcName = it.functionName; funcLoc = it.location }
         .id.transform{ "functionId: " + it}
         .queryToNodes()
-        .transform{ ["%s", funcLoc, funcName, it.type, it.code] }
+        .transform{ [it.id, "%s", funcLoc, funcName, it.type, it.code] }
         
         """ % (filename, location, filename) 
         
         y = self.j.runGremlinQuery(query)
         for z in y:
-            print '%s:%s\t%s\t%s\t%s' % tuple(z)
+            print '%s\t%s:%s\t%s\t%s\t%s' % tuple(z)
         
 
 if __name__ == '__main__':
