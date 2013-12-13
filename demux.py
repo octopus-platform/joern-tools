@@ -27,7 +27,7 @@ class Demux(PipeTool):
 
     def _createDataDir(self):
         try:
-            os.makedirs(self.dataDir)
+            os.makedirs(self.dataDir + '/data/')
         except OSError:
             pass
 
@@ -56,7 +56,7 @@ class Demux(PipeTool):
         if self.currentFilename in self.keyToFilename:
             filename = self.keyToFilename[self.currentFilename]
         else:
-            filename = self.dataDir + '/' + str(self.currentFileNum)
+            filename = self.dataDir + '/data/' + str(self.currentFileNum)
             self.currentFileNum += 1
             self.keyToFilename[self.currentFilename] = filename
             self.toc.write(self.currentFilename + '\n')
