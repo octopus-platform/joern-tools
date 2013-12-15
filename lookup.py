@@ -28,7 +28,7 @@ class Lookup(PipeTool):
 
         y = self.j.runGremlinQuery(query)
         for x in y:
-            print '%s\t%s:%s' % tuple(x)
+            self.output('%s\t%s:%s\n' % tuple(x))
 
 if __name__ == '__main__':
     tool = Lookup()

@@ -34,7 +34,7 @@ class FuncLs(PipeTool):
         
         y = self.j.runGremlinQuery(query)
         for z in y:
-            print '%s\t%s:%s\t%s\t%s\t%s' % tuple(z)
+            self.output('%s\t%s:%s\t%s\t%s\t%s\n' % tuple(z))
         
 
 if __name__ == '__main__':

@@ -26,7 +26,7 @@ class ArgTool(PipeTool):
         
         y = self.j.runGremlinQuery(query)
         for x in y:
-            print '%s\t%s\t%s\t%s' % tuple(x)
+            self.output('%s\t%s\t%s\t%s\n' % tuple(x))
     
     def _constructQueryForLine(self, line):
         

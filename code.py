@@ -20,7 +20,7 @@ class CodeTool(PipeTool):
         
         f = self._openFileOrFail(filename)
         content = self._extractContent(f, startIndex, stopIndex)
-        print content
+        self.output(content + '\n')
 
     def _openFileOrFail(self, filename):
         try:
