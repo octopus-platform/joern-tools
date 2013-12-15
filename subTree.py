@@ -4,6 +4,7 @@ from joern.all import JoernSteps
 from PipeTool import PipeTool
 
 from csvAST.CSVToPythonAST import CSVToPythonAST
+import pickle
 
 DESCRIPTION = """Prints all nodes of the AST rooted at the node with
 the given id. The default output format is a CSV format similar to
@@ -39,13 +40,18 @@ class SubTree(PipeTool):
             self.output('%s\t%s\t%s\t%s\n' % (nodeId, x[1], x[0]['type'], x[0]['code']))
             
     def _outputSexpr(self, dbResult):
+        pythonAST = self._createPythonAST(dbResult)
+        self.output(pythonAST + '\n')
+    
+    def _outputPickle(self, dbResult):
+        pythonAST = self._createPythonAST(dbResult)
+        pickle.dump(pythonAST, self.args.out, protocol=2)
+        
+    def _createPythonAST(self, dbResult):
         csvRows = (self._csvRow(z) for z in dbResult)
         converter = CSVToPythonAST()
         converter.processCSVRows(csvRows)
-        self.output(converter.getResult() + '\n')
-
-    def _outputPickle(self, dbResult):
-        pass
+        return converter.getResult()
     
     # @Override
     def streamStart(self):
