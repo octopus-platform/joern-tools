@@ -15,12 +15,25 @@ class AST2Features(DemuxTool):
         DemuxTool.__init__(self, DESCRIPTION)
         self.pruning = PythonASTToPrunedAST()
 
+        self.argParser.add_argument('-n', '--nodes-of-interest',
+                                    nargs='+', type = str,
+                                    help="""Type of nodes of
+                                    interest""", default = [])
+        
+        self.argParser.add_argument('-d', '--discard', action='store_true',
+                                    help = """Discard nodes of
+                                    interest instead of preserving
+                                    them.""", default = False)
+
     # @Override
     def processLines(self):
         ast = pythonASTFromCSV(self.lines)
         
-        self.pruning.processTree(ast)
-        ast = self.pruning.getPrunedTree()
+        if self.args.nodes_of_interest != []:
+            self.pruning.nodeTypesOfInterest = self.args.nodes_of_interest
+            self.pruning.keepNodesOfInterest = (not self.args.discard)
+            self.pruning.processTree(ast)
+            ast = self.pruning.getPrunedTree()
         
         printer = ASTPrinter()
         printer.processTree(ast)

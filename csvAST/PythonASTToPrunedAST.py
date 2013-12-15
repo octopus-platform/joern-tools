@@ -1,5 +1,6 @@
 from csvAST.PythonASTTreeNode import PythonASTTreeNode
 from csvAST.PythonASTProcessor import PythonASTProcessor
+from csvAST.CSVRowAccessors import ROW_TYPE
 
 PRUNED = 'pruned'
 prunedRow = [PRUNED, '(*)', '(*)', '(*)', '']
@@ -41,11 +42,19 @@ class PythonASTToPrunedAST(PythonASTProcessor):
             root.appendChild(newNode)
 
     def _mustPruneNode(self, node):
-        nodeType = node.row[0]
+        nodeType = node.row[ROW_TYPE]
         if (len(self.nodeTypesOfInterest) == 0): return False
         if self.keepNodesOfInterest and (nodeType in self.nodeTypesOfInterest): return False
         if (not self.keepNodesOfInterest) and (not(nodeType in self.nodeTypesOfInterest)): return False
         return True
+    
+    def _pruneNode(self, node, root):
+        # If a leaf is to be pruned, discard it altogether
+        if len(node.children) == 0: return
+        newNode = PythonASTTreeNode(prunedRow)
+        self.addPrunedChildren(node, newNode)
+        if len(newNode.children) == 0: return
+        root.appendChild(newNode)
 
     def getPrunedTree(self):
         return self.prunedTree
