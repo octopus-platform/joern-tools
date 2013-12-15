@@ -3,7 +3,7 @@
 from joern.all import JoernSteps
 from PipeTool import PipeTool
 
-from csvAST.CSVToPythonAST import pythonASTFromCSV
+from csvAST.CSVToPythonAST import pythonASTFromDbResult
 import pickle
 
 DESCRIPTION = """Prints all nodes of the AST rooted at the node with
@@ -37,8 +37,8 @@ class SubTree(PipeTool):
             x = z[1]
             self.output('%s\t%s\t%s\t%s\t%s\n' % (nodeId, id, x[1], x[0]['type'], x[0]['code']))
             
-    def _outputPickle(self, dbResult):
-        pythonAST = pythonASTFromCSV(dbResult)
+    def _outputPickle(self, dbResult, nodeId):
+        pythonAST = pythonASTFromDbResult(dbResult)
         pickle.dump(pythonAST, self.args.out, protocol=2)
         
     # @Override

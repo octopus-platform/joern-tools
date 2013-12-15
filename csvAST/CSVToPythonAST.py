@@ -42,9 +42,11 @@ class CSVToPythonAST(CSVProcessor):
     def getResult(self):
         return self.rootNode
     
-
-def pythonASTFromCSV(dbResult):
+def pythonASTFromDbResult(dbResult):
     csvRows = (_csvRow(z) for z in dbResult)
+    return pythonASTFromCSV(csvRows)
+
+def pythonASTFromCSV(csvRows):
     converter = CSVToPythonAST()
     converter.processCSVRows(csvRows)
     return converter.getResult()
