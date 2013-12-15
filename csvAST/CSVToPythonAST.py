@@ -18,7 +18,6 @@ class CSVToPythonAST(CSVProcessor):
         self.defaultHandler = self.handleNode
     
     def handleNode(self, row):
-        
         newNode = PythonASTTreeNode(row)
         
         # code below fails if level ever
@@ -40,6 +39,8 @@ class CSVToPythonAST(CSVProcessor):
         self.previousNode = newNode
     
     def getResult(self):
+        if self.rootNode.row == None:
+            self.rootNode = self.rootNode.children[0]
         return self.rootNode
     
 def pythonASTFromDbResult(dbResult):
