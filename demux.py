@@ -5,32 +5,35 @@ from DemuxTool import DemuxTool
 
 DESCRIPTION = """Split file into different files using the first field
 of each line as a key and create a table of contents. This is like
-"awk -F, '{print > $1}' file1" but in cases where the key cannot be
-used as a filename."""
+"awk -F, '{print > $1}'" but in cases where the key cannot be used as
+a filename."""
 
-DEFAULT_DATA_DIR = 'data_dir'
+DEFAULT_OUTPUT_DIR = 'out'
 
 class Demux(DemuxTool):
     def __init__(self):
         DemuxTool.__init__(self, DESCRIPTION)
+        
+        self.argParser.add_argument('-O', '--outputDir', help="""Directory to
+        write to.""", nargs='?', default = DEFAULT_OUTPUT_DIR)
+        
         self._initializeDefaults()
         
     def _initializeDefaults(self):
         self.currentFileNum = 0
         self.keyToFilename = dict()
-        self.dataDir = DEFAULT_DATA_DIR
 
     # @Override
     def streamStart(self):
-        self._createDataDir()
+        self._createOutputDir()
 
-    def _createDataDir(self):
+    def _createOutputDir(self):
         try:
-            os.makedirs(self.dataDir + '/data/')
+            os.makedirs(self.args.outputDir + '/data/')
         except OSError:
-            pass
+            pass 
 
-        self.toc = file(self.dataDir + '/TOC', 'w')
+        self.toc = file(self.args.outputDir + '/TOC', 'w')
     
     # @ Override
     def processLines(self):
@@ -49,7 +52,7 @@ class Demux(DemuxTool):
         if curKey in self.keyToFilename:
             filename = self.keyToFilename[curKey]
         else:
-            filename = self.dataDir + '/data/' + str(self.currentFileNum)
+            filename = self.args.outputDir + '/data/' + str(self.currentFileNum)
             self.currentFileNum += 1
             self.keyToFilename[curKey] = filename
             self.toc.write(curKey + '\n')
