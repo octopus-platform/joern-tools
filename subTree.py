@@ -36,13 +36,13 @@ class SubTree(PipeTool):
         for z in dbResult:
             nodeId = z[0]
             x = z[1]
-            print '%s\t%s\t%s\t%s' % (nodeId, x[1], x[0]['type'], x[0]['code'])
-    
+            self.output('%s\t%s\t%s\t%s\n' % (nodeId, x[1], x[0]['type'], x[0]['code']))
+            
     def _outputSexpr(self, dbResult):
         csvRows = (self._csvRow(z) for z in dbResult)
         converter = CSVToPythonAST()
         converter.processCSVRows(csvRows)
-        print converter.getResult()
+        self.output(converter.getResult() + '\n')
 
     def _outputPickle(self, dbResult):
         pass
