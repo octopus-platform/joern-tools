@@ -1,9 +1,10 @@
 # TODO: adapt to output of subTree.py
 
-NODE_ID = 0
-LEVEL = 1
-ROW_TYPE = 2
-CODE = 3
+ID = 0
+NODE_ID = 1
+LEVEL = 2
+ROW_TYPE = 3
+CODE = 4
 
 def getCSVRowType(row):
     return row[ROW_TYPE]
