@@ -12,7 +12,7 @@ if __name__ == '__main__':
     j.connectToDatabase()
     
     for line in sys.stdin:
-        luceneQuery = line[:-1]
+        luceneQuery = line.rstrip()
         cmd = "queryNodeIndex('functionName:%s')" % (luceneQuery)
         cmd += """
         .sideEffect{ name = it.functionName; loc = it.location; }

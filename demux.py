@@ -1,27 +1,26 @@
 #!/usr/bin/env python2
 
 import sys, os
-from PipeTool import PipeTool
+from DemuxTool import DemuxTool
 
 DESCRIPTION = """Split file into different files using the first field
-of each line as a key and creates a table of contents. This is like
+of each line as a key and create a table of contents. This is like
 "awk -F, '{print > $1}' file1" but in cases where the key cannot be
 used as a filename."""
 
 DEFAULT_DATA_DIR = 'data_dir'
 
-class Demux(PipeTool):
+class Demux(DemuxTool):
     def __init__(self):
-        PipeTool.__init__(self, DESCRIPTION)
+        DemuxTool.__init__(self, DESCRIPTION)
         self._initializeDefaults()
         
     def _initializeDefaults(self):
-        self.currentFile = None
-        self.currentFilename = ''
         self.currentFileNum = 0
         self.keyToFilename = dict()
         self.dataDir = DEFAULT_DATA_DIR
 
+    # @Override
     def streamStart(self):
         self._createDataDir()
 
@@ -32,41 +31,33 @@ class Demux(PipeTool):
             pass
 
         self.toc = file(self.dataDir + '/TOC', 'w')
-        
-    # @Override
-    def processLine(self, line):
-        record = line.split('\t')
-        if(len(record) < 2 ):
-            sys.stderr.write('Warning: input line does not contain key\n')
-            return
-        
-        filename = record[0]
-        if filename != self.currentFilename:
-            self._closeCurrentFile()
-            self.currentFilename = filename            
-            self._openOutputFile()
-
-        self.currentFile.write('\t'.join(record[1:]) + '\n')
     
-    def _closeCurrentFile(self):
-        if self.currentFile != None:
-            self.currentFile.close()
+    # @ Override
+    def processLines(self):
+        curKey = self.lines[0].split('\t')[0]
+        
+        f = self._openOutputFile(curKey)
+        
+        for line in self.lines:
+            line = line.rstrip()
+            record = line.split('\t')
+            f.write('\t'.join(record[1:]) + '\n')
+        f.close()
     
-    def _openOutputFile(self):
-        if self.currentFilename in self.keyToFilename:
-            filename = self.keyToFilename[self.currentFilename]
+    def _openOutputFile(self, curKey):
+        
+        if curKey in self.keyToFilename:
+            filename = self.keyToFilename[curKey]
         else:
             filename = self.dataDir + '/data/' + str(self.currentFileNum)
             self.currentFileNum += 1
-            self.keyToFilename[self.currentFilename] = filename
-            self.toc.write(self.currentFilename + '\n')
+            self.keyToFilename[curKey] = filename
+            self.toc.write(curKey + '\n')
 
-        self.currentFile = file(filename, 'w')
+        return file(filename, 'a')
 
     # @Override
     def streamEnd(self):
-        if self.currentFile != None:
-            self.currentFile.close()
         self.toc.close()
 
 if __name__ == '__main__':

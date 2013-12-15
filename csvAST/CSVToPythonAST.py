@@ -42,3 +42,18 @@ class CSVToPythonAST(CSVProcessor):
     def getResult(self):
         return self.rootNode
     
+
+def pythonASTFromCSV(dbResult):
+    csvRows = (_csvRow(z) for z in dbResult)
+    converter = CSVToPythonAST()
+    converter.processCSVRows(csvRows)
+    return converter.getResult()
+
+def _csvRow(z):
+    nodeId = z[0]
+    x = z[1]
+    if x[0]['operator'] == None:
+        return '%s\t%s\t%s\t%s' % (nodeId, x[1], x[0]['type'], x[0]['code']) 
+    else:
+        return '%s\t%s\t%s\t%s' % (nodeId, x[1], x[0]['type'], x[0]['operator'])
+        

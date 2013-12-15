@@ -49,7 +49,7 @@ class PipeTool():
         self.streamStart()
         for line in self.args.file:
             if self.args.echo: print '#> ' + line,
-            self.processLine(line[:-1])
+            self.processLine(line.rstrip())
         self.streamEnd()
 
     def processLine(self, line):

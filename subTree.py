@@ -3,17 +3,16 @@
 from joern.all import JoernSteps
 from PipeTool import PipeTool
 
-from csvAST.CSVToPythonAST import CSVToPythonAST
+from csvAST.CSVToPythonAST import pythonASTFromCSV
 import pickle
 
 DESCRIPTION = """Prints all nodes of the AST rooted at the node with
 the given id. The default output format is a CSV format similar to
-that used of CodeSensor."""
+that used by CodeSensor."""
 
 OUTPUT_CSV = 'csv'
-OUTPUT_SEXPR = 'sexpr'
 OUTPUT_PICKLE= 'pickle'
-OUTPUT_FORMATS = [OUTPUT_CSV, OUTPUT_SEXPR, OUTPUT_PICKLE]
+OUTPUT_FORMATS = [OUTPUT_CSV, OUTPUT_PICKLE]
 
 class SubTree(PipeTool):
     
@@ -30,29 +29,18 @@ class SubTree(PipeTool):
     def _initOutputHandlers(self):
         self.outputHandler = dict()
         self.outputHandler[OUTPUT_CSV] = self._outputCSV
-        self.outputHandler[OUTPUT_SEXPR] = self._outputSexpr
         self.outputHandler[OUTPUT_PICKLE] = self._outputPickle
     
-    def _outputCSV(self, dbResult):
+    def _outputCSV(self, dbResult, nodeId):
         for z in dbResult:
-            nodeId = z[0]
+            id = z[0]
             x = z[1]
-            self.output('%s\t%s\t%s\t%s\n' % (nodeId, x[1], x[0]['type'], x[0]['code']))
+            self.output('%s\t%s\t%s\t%s\t%s\n' % (nodeId, id, x[1], x[0]['type'], x[0]['code']))
             
-    def _outputSexpr(self, dbResult):
-        pythonAST = self._createPythonAST(dbResult)
-        self.output(pythonAST + '\n')
-    
     def _outputPickle(self, dbResult):
-        pythonAST = self._createPythonAST(dbResult)
+        pythonAST = pythonASTFromCSV(dbResult)
         pickle.dump(pythonAST, self.args.out, protocol=2)
         
-    def _createPythonAST(self, dbResult):
-        csvRows = (self._csvRow(z) for z in dbResult)
-        converter = CSVToPythonAST()
-        converter.processCSVRows(csvRows)
-        return converter.getResult()
-    
     # @Override
     def streamStart(self):
         self.j = JoernSteps()
@@ -66,17 +54,9 @@ class SubTree(PipeTool):
 
         dbResult = self.j.runGremlinQuery(query)
         
-        self.outputHandler[self.args.output_format](dbResult)
+        self.outputHandler[self.args.output_format](dbResult, nodeId)
     
-    def _csvRow(self, z):
-        nodeId = z[0]
-        x = z[1]
-        if x[0]['operator'] == None:
-            return '%s\t%s\t%s\t%s' % (nodeId, x[1], x[0]['type'], x[0]['code']) 
-        else:
-            return '%s\t%s\t%s\t%s' % (nodeId, x[1], x[0]['type'], x[0]['operator'])
-        
-
+    
 if __name__ == '__main__':
     tool = SubTree()
     tool.run()
