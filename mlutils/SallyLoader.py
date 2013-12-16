@@ -2,28 +2,31 @@
 
 from sklearn.datasets import load_svmlight_file
 from gzip import GzipFile
+from Embedding import Embedding
 
 LEN_BIN = len(' bin=')
+
+EMBEDDING_FILENAME = '/embedding.libsvm'
+FEATURE_FILENAME = '/feats.gz'
+TOC_FILENAME = '/TOC'
+D_FILENAME = '/D.pickl'
 
 class SallyLoader:
     
     def __init__(self):
-        self.x, self.y = None, None
-        self.TOC = []
-        self.rTOC = dict()
-        self.featTable = dict()
-        self.rFeatTable = dict()
-
+        self.emb = Embedding()
+        
     def load(self, dirname):
         self.dirname = dirname
-        self.x, self.y = load_svmlight_file(dirname + '/embedding.libsvm')
+        self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
         
         self._loadFeatureTable()
-        self.loadTOC()
-
+        self._loadTOC()
+        return self.emb
+    
     def _loadFeatureTable(self):
         
-        filename = self.dirname + '/feats.gz'
+        filename = self.dirname + FEATURE_FILENAME
         f  = GzipFile(filename)
         
         # discard first line
@@ -35,8 +38,8 @@ class SallyLoader:
             
             (feat, n) = self._parseHashTableLine(line)
             
-            self.featTable[feat] = n
-            self.rFeatTable[n] = feat
+            self.emb.featTable[feat] = n
+            self.emb.rFeatTable[n] = feat
             
         f.close()
     
@@ -46,14 +49,14 @@ class SallyLoader:
         feat = feat.lstrip().rstrip()
         return (feat, n)
 
-    def loadTOC(self):
-        filename = self.dirname + '/TOC'
+    def _loadTOC(self):
+        filename = self.dirname + TOC_FILENAME
         f = file(filename)
-        self.TOC = f.readlines()
+        self.emb.TOC = [x.rstrip() for x in f.readlines()]
         f.close()
         
-        for i in range(len(self.TOC)):
-            self.rTOC[self.TOC[i]] = i
+        for i in range(len(self.emb.TOC)):
+            self.emb.rTOC[self.emb.TOC[i]] = i
 
 if __name__ == '__main__':
     import sys
