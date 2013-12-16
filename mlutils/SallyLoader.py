@@ -52,12 +52,15 @@ class SallyLoader:
     def _loadTOC(self):
         filename = self.dirname + TOC_FILENAME
         f = file(filename)
-        self.emb.TOC = [x.rstrip() for x in f.readlines()]
+        TOCLines = [x.rstrip() for x in f.readlines()]
         f.close()
         
-        for i in range(len(self.emb.TOC)):
-            self.emb.rTOC[self.emb.TOC[i]] = i
-
+        for i in range(len(self.emb.y)):
+            label = self.emb.y[i]
+            name = TOCLines[int(label)]
+            self.emb.rTOC[name] = i
+            self.emb.TOC.append(name)
+            
 if __name__ == '__main__':
     import sys
     s = SallyLoader()

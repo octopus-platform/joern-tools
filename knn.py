@@ -25,8 +25,6 @@ class KNN(PipeTool):
         self.argParser.add_argument('-d', '--dirname', nargs='?',
                                     type = str, help="""The directory containing the embedding""",
                                     default = DEFAULT_DIRNAME)
-        
-        self.NNI = None
 
     def _loadEmbedding(self, dirname):
         try:
@@ -44,10 +42,10 @@ class KNN(PipeTool):
         if not self.emb.dExists():
             self.emb.D = self._calculateDistanceMatrix()
         
-        if self.NNI == None:
-            self.NNI = self.emb.D.argsort(axis=0)
-            self.NNV = self.emb.D.copy()
-            self.NNV.sort(axis=0)
+        if self.emb.NNI == None:
+            self.emb.NNI = self.emb.D.argsort(axis=0)
+            self.emb.NNV = self.emb.D.copy()
+            self.emb.NNV.sort(axis=0)
     
         try:
             dataPointIndex = self.emb.rTOC[line]
@@ -55,12 +53,16 @@ class KNN(PipeTool):
             sys.stderr.write('Warning: no data point found for %s\n' %
                              (line))
         
-        for i in self.NNI[0:self.args.k, dataPointIndex]:
+        for i in self.emb.NNI[0:self.args.k, dataPointIndex]:
             print self.emb.TOC[i]
 
 
     def _calculateDistanceMatrix(self):
         return pairwise_distances(self.emb.x, metric='cosine')
+        
+
+
+
 
 if __name__ == '__main__':
     tool = KNN()

@@ -6,7 +6,10 @@ class Embedding:
         self.rTOC = dict()
         self.featTable = dict()
         self.rFeatTable = dict()
+        
         self.D = None
+        self.NNI = None
+        self.NNV = None
 
     def dExists(self):
         return (self.D != None)
