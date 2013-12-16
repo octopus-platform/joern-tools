@@ -10,6 +10,7 @@ class SallyLoader:
     def __init__(self):
         self.x, self.y = None, None
         self.TOC = []
+        self.rTOC = dict()
         self.featTable = dict()
         self.rFeatTable = dict()
 
@@ -51,6 +52,9 @@ class SallyLoader:
         self.TOC = f.readlines()
         f.close()
         
+        for i in range(len(self.TOC)):
+            self.rTOC[self.TOC[i]] = i
+
 if __name__ == '__main__':
     import sys
     s = SallyLoader()
