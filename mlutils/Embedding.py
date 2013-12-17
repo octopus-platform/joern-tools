@@ -1,4 +1,11 @@
 
+EMBEDDING_FILENAME = '/embedding.libsvm'
+FEATURE_FILENAME = '/feats.gz'
+TOC_FILENAME = '/TOC'
+D_FILENAME = '/D'
+NNI_FILENAME = '/NNI'
+NNV_FILENAME = '/NNV'
+
 class Embedding:
     def __init__(self):
         self.x, self.y = None, None

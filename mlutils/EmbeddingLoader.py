@@ -2,20 +2,13 @@
 
 from sklearn.datasets import load_svmlight_file
 from gzip import GzipFile
-from Embedding import Embedding
+from Embedding import *
 import cPickle as pickle
 import os
 
 LEN_BIN = len(' bin=')
 
-EMBEDDING_FILENAME = '/embedding.libsvm'
-FEATURE_FILENAME = '/feats.gz'
-TOC_FILENAME = '/TOC'
-D_FILENAME = '/D'
-NNI_FILENAME = '/NNI'
-NNV_FILENAME = '/NNV'
-
-class SallyLoader:
+class EmbeddingLoader:
     
     def __init__(self):
         self.emb = Embedding()
