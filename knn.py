@@ -26,6 +26,11 @@ class KNN(PipeTool):
                                     type = str, help="""The directory containing the embedding""",
                                     default = DEFAULT_DIRNAME)
 
+        self.argParser.add_argument('-c', '--cache',
+                                    action='store_true', default=True,
+                                    help= """Cache calculated
+                                    distances on disk. """)
+
     def _loadEmbedding(self, dirname):
         try:
             return self.loader.load(dirname)
@@ -39,14 +44,8 @@ class KNN(PipeTool):
 
     # @Override
     def processLine(self, line):
-        if not self.emb.dExists():
-            self.emb.D = self._calculateDistanceMatrix()
+        self.calculateDistances()
         
-        if self.emb.NNI == None:
-            self.emb.NNI = self.emb.D.argsort(axis=0)
-            self.emb.NNV = self.emb.D.copy()
-            self.emb.NNV.sort(axis=0)
-    
         try:
             dataPointIndex = self.emb.rTOC[line]
         except KeyError:
@@ -57,12 +56,21 @@ class KNN(PipeTool):
             print self.emb.TOC[i]
 
 
+    def calculateDistances(self):
+        if not self.emb.dExists():
+            self.emb.D = self._calculateDistanceMatrix()
+            
+        if not self.emb.nnExists():
+            self._calculateNearestNeighbors()
+            
+    def _calculateNearestNeighbors(self):
+        self.emb.NNI = self.emb.D.argsort(axis=0)
+        self.emb.NNV = self.emb.D.copy()
+        self.emb.NNV.sort(axis=0)
+
     def _calculateDistanceMatrix(self):
         return pairwise_distances(self.emb.x, metric='cosine')
         
-
-
-
 
 if __name__ == '__main__':
     tool = KNN()

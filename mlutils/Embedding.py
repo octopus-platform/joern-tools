@@ -13,3 +13,7 @@ class Embedding:
 
     def dExists(self):
         return (self.D != None)
+    
+    def nnExists(self):
+        return (self.NNI != None)
+        

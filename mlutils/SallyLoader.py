@@ -3,13 +3,17 @@
 from sklearn.datasets import load_svmlight_file
 from gzip import GzipFile
 from Embedding import Embedding
+import cPickle as pickle
+import os
 
 LEN_BIN = len(' bin=')
 
 EMBEDDING_FILENAME = '/embedding.libsvm'
 FEATURE_FILENAME = '/feats.gz'
 TOC_FILENAME = '/TOC'
-D_FILENAME = '/D.pickl'
+D_FILENAME = '/D'
+NNI_FILENAME = '/NNI'
+NNV_FILENAME = '/NNV'
 
 class SallyLoader:
     
@@ -22,6 +26,7 @@ class SallyLoader:
         
         self._loadFeatureTable()
         self._loadTOC()
+        self._loadDistances()
         return self.emb
     
     def _loadFeatureTable(self):
@@ -60,7 +65,21 @@ class SallyLoader:
             name = TOCLines[int(label)]
             self.emb.rTOC[name] = i
             self.emb.TOC.append(name)
-            
+
+    def _loadDistances(self):
+        
+        dFilename = self.dirname + D_FILENAME
+        if os.path.exists(dFilename):
+           self.emb.D = pickle.load(file(dFilename))
+
+        nniFilename = self.dirname + NNI_FILENAME
+        nnvFilename = self.dirname + NNV_FILENAME
+        
+        if os.path.exists(nniFilename):
+            self.emb.NNI = pickle.load(file(nniFilename))
+            self.emb.NNV = pickle.load(file(nnvFilename))
+        
+
 if __name__ == '__main__':
     import sys
     s = SallyLoader()
