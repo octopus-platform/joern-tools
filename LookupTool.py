@@ -35,8 +35,10 @@ class LookupTool(PipeTool):
         else:
             keys = [k for k in node]
             keyValPairs = [str(k) + ':' + str(node[k]) for k in keys]
+            keyValPairs.sort()
         
-        keyValPairs.sort()
+        keyValPairs = [k.replace('\t', '') for k in keyValPairs]
+        
         self.output('%s\t%s\n' % (id, '\t'.join(keyValPairs)))
 
     # @Override

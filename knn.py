@@ -62,12 +62,12 @@ class KNN(PipeTool):
     def calculateDistances(self):
         if not self.emb.dExists():
             self.emb.D = self._calculateDistanceMatrix()
-            if self.args.cache:
+            if not self.args.no_cache:
                 self.saver.saveDistanceMatrix(self.emb)
             
         if not self.emb.nnExists():
             self._calculateNearestNeighbors()
-            if self.args.cache:
+            if not self.args.no_cache:
                 self.saver.saveNearestNeighbors(self.emb)
             
     def _calculateNearestNeighbors(self):
