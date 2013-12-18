@@ -31,7 +31,7 @@ class LookupTool(PipeTool):
         
         if type(node) == list:
             keys = self.args.attributes
-            keyValPairs = [(keys[i] + ':' + node[i]) for i in range(len(keys))]
+            keyValPairs = [(keys[i] + ':' + str(node[i])) for i in range(len(keys))]
         else:
             keys = [k for k in node]
             keyValPairs = [str(k) + ':' + str(node[k]) for k in keys]
