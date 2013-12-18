@@ -15,7 +15,7 @@ class Lookup(LookupTool):
         
         luceneQuery = line
         if luceneQuery.startswith('id:'):
-            id = query.split(':')[1]
+            id = luceneQuery.split(':')[1]
             query = 'g.v(%s)' % (id)
         else:
             query = """queryNodeIndex('%s')""" % (luceneQuery)
