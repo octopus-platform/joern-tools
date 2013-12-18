@@ -14,7 +14,13 @@ class LookupTool(PipeTool):
                                     default=False,
                                     help = """ Output the complete
                                     node, not just its ID.""")
-                                     
+        
+        
+        self.argParser.add_argument('-a', '--attributes',
+                                    nargs='+', type = str,
+                                    help="""Attributes of interest""",
+                                    default = [])
+
     # @Override
     def streamStart(self):
         self.j = JoernSteps()
@@ -22,9 +28,15 @@ class LookupTool(PipeTool):
 
     def outputRecord(self, record):
         id, node = record
-        keys = [k for k in node]
-        keys.sort()
-        keyValPairs = [str(k) + ':' + str(node[k]) for k in keys]
+        
+        if type(node) == list:
+            keys = self.args.attributes
+            keyValPairs = [(keys[i] + ':' + node[i]) for i in range(len(keys))]
+        else:
+            keys = [k for k in node]
+            keyValPairs = [str(k) + ':' + str(node[k]) for k in keys]
+        
+        keyValPairs.sort()
         self.output('%s\t%s\n' % (id, '\t'.join(keyValPairs)))
 
     # @Override
@@ -33,6 +45,12 @@ class LookupTool(PipeTool):
 
         if self.args.complete:
             query += '.transform{ [it.id, it]}'
+        elif self.args.attributes != []:
+            query += '.transform{ [it.id, ['
+            for attr in self.args.attributes:
+                query += 'it.%s,' % (attr)
+            query = query[:-1]
+            query += ']]}'
         else:
             query += '.transform{[it.id, []]}'
         
