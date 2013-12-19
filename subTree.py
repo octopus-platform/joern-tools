@@ -16,12 +16,22 @@ class SubTree(PipeTool):
         PipeTool.__init__(self, DESCRIPTION)
     
     def _outputCSV(self, dbResult, rootNodeId):
+        out = ''
         for z in dbResult:
             id = z[0]
             x = z[1]
             # rootNodeId nodeId depth
-            self.output('%s\t%s\t%s\n' % (rootNodeId, id, x[1]))
+            out += '%s\t%s\t%s\t' % (rootNodeId, id, x[1])
     
+            for k in x[0]:
+                attrKey = str(k)
+                attrVal = x[0][k]
+                attrVal = str(attrVal).replace('\t', ' ')
+                out += '%s:%s\t' % (attrKey, attrVal)
+            out = out[:-1] + '\n'
+
+            self.output(out)
+
     # @Override
     def streamStart(self):
         self.j = JoernSteps()

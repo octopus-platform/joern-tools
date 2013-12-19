@@ -47,5 +47,3 @@ def pythonASTFromCSV(csvRows):
     converter = CSVToPythonAST()
     converter.processCSVRows(csvRows)
     return converter.getResult()
-
-    

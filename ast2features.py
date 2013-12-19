@@ -3,7 +3,6 @@
 from DemuxTool import DemuxTool
 from csvAST.CSVToPythonAST import pythonASTFromCSV
 from csvAST.PythonASTToPrunedAST import PythonASTToPrunedAST
-from csvAST.ParseTreeFilter import ParseTreeFilter
 from csvAST.ASTPrinter import ASTPrinter
 import pickle
 
