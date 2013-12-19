@@ -31,11 +31,13 @@ class SubTree(PipeTool):
         self.outputHandler[OUTPUT_CSV] = self._outputCSV
         self.outputHandler[OUTPUT_PICKLE] = self._outputPickle
     
-    def _outputCSV(self, dbResult, nodeId):
+    def _outputCSV(self, dbResult, rootNodeId):
         for z in dbResult:
             id = z[0]
             x = z[1]
-            self.output('%s\t%s\t%s\t%s\t%s\n' % (nodeId, id, x[1], x[0]['type'], x[0]['code']))
+            # rootNodeId, nodeId, depth, type, code
+            code = x[0]['code'].replace('\t', ' ')
+            self.output('%s\t%s\t%s\t%s\t%s\n' % (rootNodeId, id, x[1], x[0]['type'], x[0]['code']))
             
     def _outputPickle(self, dbResult, nodeId):
         pythonAST = pythonASTFromDbResult(dbResult)

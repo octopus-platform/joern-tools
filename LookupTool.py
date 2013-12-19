@@ -55,7 +55,7 @@ class LookupTool(PipeTool):
             query += ']]}'
         else:
             query += '.transform{[it.id, []]}'
-        
+
         y = self.j.runGremlinQuery(query)
         for x in y:
             self.outputRecord(x)

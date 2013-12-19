@@ -18,5 +18,3 @@ def getCSVRowEndPos(row):
 def getCSVRowLevel(row):
     return row[LEVEL]
 
-def getCSVRowCondition(row):
-    return row[CONDITION]
