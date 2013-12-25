@@ -3,8 +3,8 @@
 from LookupTool import LookupTool
 
 DESCRIPTION = """Lookup nodes using lucene queries and output one row
-for each property each matching node. Rows are in the format '[nodeId,
-attributeName, attributeValue]'.
+for each matching node. Rows are in the format functionId TAB
+attributeKey:attributeValue TAB ...'
 """
 
 class Lookup(LookupTool):

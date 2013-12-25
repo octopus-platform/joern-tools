@@ -26,6 +26,32 @@ class LookupTool(PipeTool):
         self.j = JoernSteps()
         self.j.connectToDatabase()
 
+    # @Override
+    def processLine(self, line):
+        query = self._queryFromLine(line)
+        query += self._outputTransformTerm()
+
+        y = self.j.runGremlinQuery(query)
+        for x in y:
+            self.outputRecord(x)
+
+    def _outputTransformTerm(self):
+        """
+        Calculate the output transformation term based on command line
+        options.
+        """
+        if self.args.complete:
+            return '.transform{ [it.id, it]}'
+        elif self.args.attributes != []:
+            term = '.transform{ [it.id, ['
+            for attr in self.args.attributes:
+                term += 'it.%s,' % (attr)
+            term = term[:-1]
+            term += ']]}'
+            return term
+        else:
+            return '.transform{[it.id, []]}'
+
     def outputRecord(self, record):
         id, node = record
         
@@ -41,27 +67,7 @@ class LookupTool(PipeTool):
         
         self.output('%s\t%s\n' % (id, '\t'.join(keyValPairs)))
 
-    # @Override
-    def processLine(self, line):
-        query = self._queryFromLine(line)
-
-        if self.args.complete:
-            query += '.transform{ [it.id, it]}'
-        elif self.args.attributes != []:
-            query += '.transform{ [it.id, ['
-            for attr in self.args.attributes:
-                query += 'it.%s,' % (attr)
-            query = query[:-1]
-            query += ']]}'
-        else:
-            query += '.transform{[it.id, []]}'
-
-        y = self.j.runGremlinQuery(query)
-        for x in y:
-            self.outputRecord(x)
-
     # Override this
     def _queryFromLine(self, line):
         return ''
-    
     
