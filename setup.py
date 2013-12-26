@@ -17,6 +17,6 @@ setup(
     long_description = read('README.md'),
     packages = find_packages(),
     scripts = [f for f in os.listdir('.') if fnmatch.fnmatch(f, '*.py')],
-    install_requires = ['joern >= 0.1'],
+    install_requires = ['joern >= 0.1', 'pygraphviz'],
     dependency_links = ['https://github.com/fabsx00/python-joern/tarball/master/#egg=joern-0.1']
 )
