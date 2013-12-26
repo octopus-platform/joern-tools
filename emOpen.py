@@ -2,8 +2,8 @@
 
 import os
 
-from ParseLocationString import parseLocationOrFail
-from PipeTool import PipeTool
+from joerntools.view.ParseLocationString import parseLocationOrFail
+from joerntools.shelltool.PipeTool import PipeTool
 
 DESCRIPTION = """ Opens emacs at the location specified by a location
 string """

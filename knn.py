@@ -1,8 +1,9 @@
 #!/usr/bin/env python2
 
-from PipeTool import PipeTool
-from mlutils.EmbeddingLoader import EmbeddingLoader
-from mlutils.EmbeddingSaver import EmbeddingSaver
+from joerntools.shelltool.PipeTool import PipeTool
+from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
+from joerntools.mlutils.EmbeddingSaver import EmbeddingSaver
+
 from sklearn.metrics.pairwise import pairwise_distances
 import sys
 

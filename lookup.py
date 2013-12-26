@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from LookupTool import LookupTool
+from joerntools.shelltool.LookupTool import LookupTool
 
 DESCRIPTION = """Lookup nodes using lucene queries and output one row
 for each matching node. Rows are in the format functionId TAB

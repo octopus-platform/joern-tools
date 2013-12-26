@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 import sys
-from LookupTool import LookupTool
+from joerntools.shelltool.LookupTool import LookupTool
 
 DESCRIPTION = """Lookup the location of a node in the code."""
 

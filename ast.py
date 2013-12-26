@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from JoernTool import JoernTool
+from joerntools.shelltool.JoernTool import JoernTool
 import pygraphviz as pgv
 
 DESCRIPTION = """Retrieve the AST rooted at the node with the given

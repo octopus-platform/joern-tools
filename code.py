@@ -2,8 +2,8 @@
 
 import sys, argparse
 from joern.all import JoernSteps
-from ParseLocationString import parseLocationOrFail
-from PipeTool import PipeTool
+from joerntools.view.ParseLocationString import parseLocationOrFail
+from joerntools.shelltool.PipeTool import PipeTool
 
 DESCRIPTION = """Read filename:startLine:startPos:startIndex:stopIndex
 from standard input and output the respective code."""
