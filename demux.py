@@ -38,7 +38,7 @@ class Demux(DemuxTool):
     # @ Override
     def processLines(self):
         curKey = self.lines[0].split('\t')[0]
-        
+
         f = self._openOutputFile(curKey)
         
         for line in self.lines:
@@ -61,6 +61,8 @@ class Demux(DemuxTool):
 
     # @Override
     def streamEnd(self):
+        if self.lines != []:
+            self.processLines()
         self.toc.close()
 
 if __name__ == '__main__':
