@@ -39,22 +39,27 @@ class AST(JoernTool):
     def _createDotGraph(self, nodes, edges):
         G = pgv.AGraph()
         
-        for n in nodes:
-            nodeId = n._id
+        idNodePairs = [(n._id, n) for n in nodes]
+        
+        for (nodeId, n) in idNodePairs:
             G.add_node(nodeId)
             node = G.get_node(nodeId)
             node.attr['label'] = self._attributesAsString(n)
-    
-        for e in edges:
-            startNode = e.start_node._id
-            endNode = e.end_node._id
+
+        srcDstPairs = [(e.start_node._id, e.end_node._id) for e in edges]
+        
+        for (startNode, endNode) in srcDstPairs:
             G.add_edge(startNode, endNode)
             
         return G
     
     def _attributesAsString(self, n):
-        return '\n'.join( [k + ':' + str(n[k]).replace('\n',' ') for k in n])
-    
+        
+        properties = n.__metadata__['data']
+        return '\n'.join(['%s:%s' % (k, str(v).replace('\n',' '))
+                          for (k,v) in properties.iteritems()])
+        
+
     def _outputGraph(self, G, identifier):
         ENDMARKER = '//###'
         self.output('//' + identifier + '\n')

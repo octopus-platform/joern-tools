@@ -1,5 +1,5 @@
 
-from PipeTool import PipeTool
+from joerntools.shelltool.PipeTool import PipeTool
 from joern.all import JoernSteps
 
 class JoernTool(PipeTool):
