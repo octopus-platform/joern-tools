@@ -8,8 +8,9 @@ class GraphvizTool(PipeTool):
         PipeTool.__init__(self, description)
         self.lines = []
 
+    # @Override
     def processLine(self, line):
-        ENDMARKER = '###'
+        ENDMARKER = '//###'
         
         if line == ENDMARKER:
             self.processLines()
@@ -18,9 +19,30 @@ class GraphvizTool(PipeTool):
             self.lines.append(line)
             
     def processLines(self):
-        s = ''.join(self.lines)
-        G = AGraph(string=s)
+        if len(self.lines) == 0:
+            return
+        
+        self.identifier = self.lines[0][2:]
 
+        s = '\n'.join(self.lines)
+        A = AGraph()
+        G = A.from_string(s)
+        self.processGraph(G)
+        
+
+    def processGraph(self, G):
+        print G
+
+    # @Override
+    def streamEnd(self):
+        if self.lines != []:
+            self.processLines()
+
+    def _outputGraph(self, G, identifier):
+        ENDMARKER = '//###'
+        self.output('//' + identifier + '\n')
+        self.output(str(G) + '\n')
+        self.output(ENDMARKER + '\n')
 
 if __name__ == '__main__':
     tool = GraphvizTool('foo')

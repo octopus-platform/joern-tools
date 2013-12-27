@@ -7,7 +7,7 @@ DESCRIPTION = """Retrieve the AST rooted at the node with the given
 id. The default output format is graphviz's 'dot'.
 """
 
-class SubTree(JoernTool):
+class AST(JoernTool):
     
     def __init__(self):
         JoernTool.__init__(self, DESCRIPTION)
@@ -55,11 +55,12 @@ class SubTree(JoernTool):
     def _attributesAsString(self, n):
         return '\n'.join( [k + ':' + str(n[k]).replace('\n',' ') for k in n])
     
-    def _outputGraph(self, G, line):
-        self.output('//' + line + '\n')
+    def _outputGraph(self, G, identifier):
+        ENDMARKER = '//###'
+        self.output('//' + identifier + '\n')
         self.output(str(G) + '\n')
-
+        self.output(ENDMARKER + '\n')
     
 if __name__ == '__main__':
-    tool = SubTree()
+    tool = AST()
     tool.run()

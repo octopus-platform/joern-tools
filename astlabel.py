@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 
 DESCRIPTION = """Labels AST nodes according to a labeling scheme. """
 
@@ -11,17 +12,15 @@ class ASTLabel(GraphvizTool):
     # @Override
     def processGraph(self, G):
         for node in G: self.processNode(G, node)
-        print G
+        self._outputGraph(G, self.identifier)
 
     def processNode(self, G, node):
         attributes = str(node.attr['label']).split('\n')
         attrDict = {}
         for a in attributes:
             i = a.find(':')
-            print i
             k = a[:i]
             v = a[i+1:]
-            print k,v 
             attrDict[k] = v
         
         children = G.out_edges([node])
