@@ -34,7 +34,7 @@ class LookupTool(TraversalTool):
     def queryFromLine(self, line):
         
         if self.args.gremlin:
-            return line
+            return self.addOutputTransformation(line)
         
         luceneQuery = line
         if luceneQuery.startswith('id:'):
@@ -44,7 +44,8 @@ class LookupTool(TraversalTool):
             query = """queryNodeIndex('%s')""" % (luceneQuery)
         
         return self.addOutputTransformation(query)
-    
+        
+
     def addOutputTransformation(self, query):
         """
         Calculate the output transformation term based on command line
