@@ -13,6 +13,9 @@ class Location(LookupTool):
      # @Override
     def processLine(self, line):
  
+        # Note, that since we override processLine,
+        # queryFromLine will not be called either.
+
         # For functions, get location of function
         # For statement, get location of statement
         # For AST nodes, get location of statement
