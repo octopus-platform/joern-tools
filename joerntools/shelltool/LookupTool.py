@@ -17,6 +17,12 @@ class LookupTool(TraversalTool):
                                     help = """ Output the complete
                                     node, not just its ID.""")
         
+        self.argParser.add_argument('-g', '--gremlin',
+                                    action='store_true',
+                                    default=False, help = """query is
+                                    a gremlin traversal as opposed to a lucene
+                                    query""")
+
         
         self.argParser.add_argument('-a', '--attributes',
                                     nargs='+', type = str,
@@ -26,6 +32,9 @@ class LookupTool(TraversalTool):
     # @Override
 
     def queryFromLine(self, line):
+        
+        if self.args.gremlin:
+            return line
         
         luceneQuery = line
         if luceneQuery.startswith('id:'):
