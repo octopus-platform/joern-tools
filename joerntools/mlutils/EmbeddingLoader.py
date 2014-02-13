@@ -42,7 +42,7 @@ class EmbeddingLoader:
         f.close()
     
     def _parseHashTableLine(self, line):
-        n, feat = line[LEN_BIN+1:].split(':')
+        n, feat = line[LEN_BIN+1:].split(':',1)
         n = int(n , 16)
         feat = feat.lstrip().rstrip()
         return (feat, n)
