@@ -23,15 +23,14 @@ class AST(JoernTool):
         self._outputGraph(G, line)
     
     def _getASTNodes(self, nodeId):
-        query = """g.v(%d).functionToASTRoot()
-        .astNodeToSubNodes()
+        query = """g.v(%d).functionToAST().astNodes()
         """% (nodeId)
         
         return self._runGremlinQuery(query)
     
     def _getASTEdges(self, nodeId):
-        query = """g.v(%d).functionToASTRoot()
-        .astNodeToSubNodes().outE('IS_AST_PARENT')
+        query = """g.v(%d).functionToAST()
+        .astNodes().outE('IS_AST_PARENT')
         """% (nodeId)
         
         return self._runGremlinQuery(query)
