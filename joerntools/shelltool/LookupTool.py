@@ -34,7 +34,7 @@ class LookupTool(TraversalTool):
     def queryFromLine(self, line):
         
         if self.args.gremlin:
-            return self.addOutputTransformation(line)
+            return line
         
         luceneQuery = line
         if luceneQuery.startswith('id:'):
@@ -73,6 +73,10 @@ class LookupTool(TraversalTool):
 
     
     def _outputRecord(self, record):
+        if self.args.gremlin:
+            self.output(record + '\n')
+            return
+
         id, node = record
         
         if type(node) == list:
