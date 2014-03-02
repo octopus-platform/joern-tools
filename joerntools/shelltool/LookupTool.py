@@ -73,8 +73,9 @@ class LookupTool(TraversalTool):
 
     
     def _outputRecord(self, record):
+        
         if self.args.gremlin:
-            self.output(record + '\n')
+            self.output(str(record) + '\n')
             return
 
         id, node = record
