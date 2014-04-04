@@ -57,7 +57,7 @@ class KNN(PipeTool):
             sys.stderr.write('Warning: no data point found for %s\n' %
                              (line))
         
-        for i in self.emb.NNI[1:self.args.k+1, dataPointIndex]:
+        for i in self.emb.NNI[0:self.args.k, dataPointIndex]:
             print self.emb.TOC[i]
 
 
