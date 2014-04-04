@@ -38,7 +38,7 @@ class KNN(PipeTool):
     def _loadEmbedding(self, dirname):
         self.saver.setEmbeddingDir(dirname)
         try:
-            return self.loader.load(dirname)
+            return self.loader.load(dirname, tfidf=True)
         except IOError:
             sys.stderr.write('Error reading embedding.\n')
             sys.exit()

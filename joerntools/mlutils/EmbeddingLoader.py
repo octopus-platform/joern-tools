@@ -15,12 +15,13 @@ class EmbeddingLoader:
     def __init__(self):
         self.emb = Embedding()
         
-    def load(self, dirname):
+    def load(self, dirname, tfidf = False):
         self.dirname = dirname
         self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
         
-        tfidf = TfidfTransformer()
-        self.emb.x =  tfidf.fit_transform(self.emb.x)
+        if tfidf:
+            tfidf = TfidfTransformer()
+            self.emb.x =  tfidf.fit_transform(self.emb.x)
 
         self._loadFeatureTable()
         self._loadTOC()
