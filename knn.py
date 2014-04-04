@@ -5,6 +5,7 @@ from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
 from joerntools.mlutils.EmbeddingSaver import EmbeddingSaver
 
 from sklearn.metrics.pairwise import pairwise_distances
+
 import sys
 
 DESCRIPTION = """ Calculate the k nearest neighbors to a data point
@@ -56,7 +57,7 @@ class KNN(PipeTool):
             sys.stderr.write('Warning: no data point found for %s\n' %
                              (line))
         
-        for i in self.emb.NNI[0:self.args.k, dataPointIndex]:
+        for i in self.emb.NNI[1:self.args.k+1, dataPointIndex]:
             print self.emb.TOC[i]
 
 
@@ -72,13 +73,13 @@ class KNN(PipeTool):
                 self.saver.saveNearestNeighbors(self.emb)
             
     def _calculateNearestNeighbors(self):
-        self.emb.NNI = self.emb.D.argsort(axis=0)
         self.emb.NNV = self.emb.D.copy()
+        self.emb.NNI = self.emb.D.argsort(axis=0)
         self.emb.NNV.sort(axis=0)
-
+        
     def _calculateDistanceMatrix(self):
         return pairwise_distances(self.emb.x, metric='cosine')
-        
+
 
 if __name__ == '__main__':
     tool = KNN()

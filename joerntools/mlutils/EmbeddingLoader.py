@@ -6,6 +6,8 @@ from Embedding import *
 import cPickle as pickle
 import os
 
+from sklearn.feature_extraction.text import TfidfTransformer
+
 LEN_BIN = len(' bin=')
 
 class EmbeddingLoader:
@@ -17,6 +19,9 @@ class EmbeddingLoader:
         self.dirname = dirname
         self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
         
+        tfidf = TfidfTransformer()
+        self.emb.x =  tfidf.fit_transform(self.emb.x)
+
         self._loadFeatureTable()
         self._loadTOC()
         self._loadDistances()
