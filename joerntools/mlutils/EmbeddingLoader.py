@@ -15,13 +15,27 @@ class EmbeddingLoader:
     def __init__(self):
         self.emb = Embedding()
         
-    def load(self, dirname, tfidf = False):
+    def load(self, dirname, tfidf = False, svd_k = 0):
         self.dirname = dirname
         self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
         
         if tfidf:
             tfidf = TfidfTransformer()
             self.emb.x =  tfidf.fit_transform(self.emb.x)
+
+        if svd_k != 0:
+            try:
+                import sparsesvd
+                import scipy.sparse
+                
+                X = self.emb.x.T
+                X = scipy.sparse.csc_matrix(X)
+                Ut, S, Vt = sparsesvd.sparsesvd(X, svd_k)
+                self.emb.x = scipy.sparse.csr_matrix(Vt.T)
+
+
+            except ImportError:
+                print 'Warning: Cannot perform SVD without sparsesvd module'
 
         self._loadFeatureTable()
         self._loadTOC()
