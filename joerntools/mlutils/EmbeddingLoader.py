@@ -45,6 +45,9 @@ class EmbeddingLoader:
     def _loadFeatureTable(self):
         
         filename = self.dirname + FEATURE_FILENAME
+        if not os.path.exists(filename):
+            return
+
         f  = GzipFile(filename)
         
         # discard first line
