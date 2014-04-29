@@ -5,6 +5,7 @@ from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
 from joerntools.mlutils.EmbeddingSaver import EmbeddingSaver
 
 from sklearn.metrics.pairwise import pairwise_distances
+from argparse import FileType
 
 import sys
 
@@ -35,10 +36,16 @@ class KNN(PipeTool):
                                     help= """Cache calculated
                                     distances on disk. """)
 
+        self.argParser.add_argument('-l', '--limit', type = FileType('r'), default=None,
+                                    help = """ Limit possible
+                                    neighbours to those specified in
+                                    the provided file.""")
+        
+
     def _loadEmbedding(self, dirname):
         self.saver.setEmbeddingDir(dirname)
         try:
-            return self.loader.load(dirname, tfidf=True, svd_k=0)
+            return self.loader.load(dirname, tfidf=False, svd_k=0)
         except IOError:
             sys.stderr.write('Error reading embedding.\n')
             sys.exit()
@@ -46,6 +53,13 @@ class KNN(PipeTool):
     # @Override
     def streamStart(self):
         self.emb = self._loadEmbedding(self.args.dirname)
+        if self.args.limit:
+            self._loadValidNeighbors()
+
+    def _loadValidNeighbors(self):
+        self.validNeighbors = [int(x) for x in
+                                   self.args.limit.readlines()]
+
 
     # @Override
     def processLine(self, line):
@@ -56,10 +70,20 @@ class KNN(PipeTool):
         except KeyError:
             sys.stderr.write('Warning: no data point found for %s\n' %
                              (line))
-        
-        for i in self.emb.NNI[0:self.args.k, dataPointIndex]:
-            print self.emb.TOC[i]
+            
+        nReturned = 0
+            
+        for i in self.emb.NNI[:, dataPointIndex]:
+            
+            if self.args.limit:
+                if not int(self.emb.TOC[i]) in self.validNeighbors:
+                    continue
 
+            print self.emb.TOC[i]
+            nReturned += 1
+            
+            if nReturned == self.args.k:
+                break
 
     def calculateDistances(self):
         if not self.emb.dExists():
