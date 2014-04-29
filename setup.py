@@ -16,7 +16,10 @@ setup(
     url = "http://github.com/fabsx00/joern-tools/",
     long_description = read('README.md'),
     packages = find_packages(),
+    package_data={"joerntools": ['steps/*',]},
     scripts = [f for f in os.listdir('.') if fnmatch.fnmatch(f, '*.py')],
     install_requires = ['joern >= 0.1', 'pygraphviz'],
-    dependency_links = ['https://github.com/fabsx00/python-joern/tarball/master/#egg=joern-0.1']
+    dependency_links = ['https://github.com/fabsx00/python-joern/tarball/master/#egg=joern-0.1'],
+    zip_safe = False
 )
+

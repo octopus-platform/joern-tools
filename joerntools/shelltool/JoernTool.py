@@ -7,7 +7,7 @@ class JoernTool(PipeTool):
     def __init__(self, DESCRIPTION):
         PipeTool.__init__(self, DESCRIPTION)
     
-     # @Override
+    # @Override
     def streamStart(self):
         self._connectToDatabase()
     
