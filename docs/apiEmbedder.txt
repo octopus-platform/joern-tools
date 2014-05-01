@@ -1,0 +1,21 @@
+
+NAME
+
+apiEmbedder.py - A tool to embed code in vector spaces
+
+SYNOPSIS
+
+apiEmbedder.py [options]
+
+DESCRIPTION
+
+embedder.py creates an embedding of functions based on the API symbols
+they employ as well as a corresponding distance matrix. These
+embeddings are used by knn.py to identify similar functions but may
+also serve as a basis for other tools that require a vectorial
+representation of code.
+
+-d --dirname <dirname>
+
+Output directory of the embedding. By default, output will be written
+to the directory 'embedding'.
