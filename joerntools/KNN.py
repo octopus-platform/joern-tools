@@ -45,17 +45,21 @@ class KNN():
         dataPointIndex = self.emb.rTOC[line]    
         nReturned = 0
             
+        neighbors = []
+            
         for i in self.emb.NNI[:, dataPointIndex]:
             
             if self.limit:
                 if not int(self.emb.TOC[i]) in self.validNeighbors:
                     continue
 
-            print self.emb.TOC[i]
+            neighbors.append(self.emb.TOC[i])
             nReturned += 1
             
             if nReturned == self.k:
                 break
+
+        return neighbors
     
     def calculateDistances(self):
         if not self.emb.dExists():
