@@ -4,7 +4,9 @@ from argparse import ArgumentParser
 from joerntools.DBInterface import DBInterface
 import os
 import sys
-from joerntools.mlutils.pythonEmbedder.PythonEmbedder import Embedder
+
+from sklearn.metrics.pairwise import pairwise_distances
+from joerntools.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder
 
 description = """apiEmbedder.py - A tool to embed code in vector spaces"""
 
@@ -27,6 +29,7 @@ class APIEmbedder(object):
     def _initializeDBConnection(self):
         self.dbInterface = DBInterface()
     
+    
     def run(self):
         self._parseCommandLine()
         self._initializeOutputDirectory()
@@ -37,9 +40,10 @@ class APIEmbedder(object):
         self._finalizeOutputDirectory()
     
         self._embed()
+                
     
     def _embed(self):
-        self.embedder = Embedder()
+        self.embedder = SallyBasedEmbedder()
         self.embedder.embed(self.args.dirname)
     
     def _connectToDatabase(self):

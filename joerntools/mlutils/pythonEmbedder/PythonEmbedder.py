@@ -8,9 +8,9 @@ class Embedder:
     def embed(self, directory):
         
         featureArray = self._createFeatureArray(directory)
-        termDocMatrix = self._createTermDocumentMatrix(featureArray)
-        termDocMatrix.tfidf()
-        self._outputInLIBSVMFormat(termDocMatrix, directory)
+        self.termDocMatrix = self._createTermDocumentMatrix(featureArray)
+        self.termDocMatrix.tfidf()
+        self._outputInLIBSVMFormat(directory)
         
     def _createFeatureArray(self, directory):
         
@@ -29,17 +29,17 @@ class Embedder:
         converter = FeatureArrayToMatrix()
         return converter.convertFeatureArray(featureArray)
     
-    def _outputInLIBSVMFormat(self, termDocMatrix, directory):
+    def _outputInLIBSVMFormat(self, directory):
         
         from scipy.sparse import csc_matrix
-        m =  csc_matrix(termDocMatrix.matrix)
+        m =  csc_matrix(self.termDocMatrix.matrix)
         nCols = m.shape[1]
         
         outFilename = os.path.join(directory, 'embedding.libsvm')
         outFile = file(outFilename, 'w')
         
         for i in xrange(nCols):
-            label = termDocMatrix.index2Doc[i] 
+            label = self.termDocMatrix.index2Doc[i] 
             
             col = m.getcol(i)
             entries = [(i,col[i,0]) for i in col.indices]

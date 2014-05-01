@@ -86,7 +86,7 @@ class EmbeddingLoader:
         
         dFilename = self.dirname + D_FILENAME
         if os.path.exists(dFilename):
-           self.emb.D = pickle.load(file(dFilename))
+            self.emb.D = pickle.load(file(dFilename))
 
         nniFilename = self.dirname + NNI_FILENAME
         nnvFilename = self.dirname + NNV_FILENAME
@@ -98,6 +98,6 @@ class EmbeddingLoader:
 
 if __name__ == '__main__':
     import sys
-    s = SallyLoader()
+    s = EmbeddingLoader()
     s.load(sys.argv[1])
     

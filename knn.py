@@ -32,7 +32,7 @@ class KNN(PipeTool):
                                     default = DEFAULT_DIRNAME)
 
         self.argParser.add_argument('-n', '--no-cache',
-                                    action='store_false', default=True,
+                                    action='store_false', default=False,
                                     help= """Cache calculated
                                     distances on disk. """)
 
@@ -88,6 +88,7 @@ class KNN(PipeTool):
     def calculateDistances(self):
         if not self.emb.dExists():
             self.emb.D = self._calculateDistanceMatrix()
+     
             if not self.args.no_cache:
                 self.saver.saveDistanceMatrix(self.emb)
             
