@@ -33,11 +33,15 @@ class KNN():
         nReturned = 0
 
         if self.limit:
-            validNeighbors = [dataPointIndex] +  self.limit
+            validNeighborIds = [dataPointIndex] + self.limit
+            
+            validNeighbors = [self.emb.rTOC[x] for x in self.limit]
+            validNeighbors = [dataPointIndex] +  validNeighbors
+            
             X = self.emb.x[validNeighbors, :]
             D = pairwise_distances(X, metric='cosine')
             NNI = list(D[0,:] .argsort(axis=0))[:self.k]
-            return [validNeighbors[x] for x in NNI]
+            return [validNeighborIds[x] for x in NNI]
         else:
             X = self.emb.x
             D = pairwise_distances(X, metric='cosine')
