@@ -2,7 +2,7 @@ from joerntools.DBInterface import DBInterface
 from joerntools.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder
 
 import os
-import sys
+from joerntools.mlutils.pythonEmbedder.PythonEmbedder import Embedder
 
 class APIEmbedder(object):
     
@@ -16,7 +16,13 @@ class APIEmbedder(object):
         self.outputDirectory = directory
 
     def run(self):
-        self._initializeOutputDirectory()
+        
+        try: 
+            # Will throw error if output directory already exists
+            self._initializeOutputDirectory()
+        except:
+            return
+        
         self._connectToDatabase()
         
         functions = self._getAPISymbolsFromDatabase()
@@ -27,7 +33,8 @@ class APIEmbedder(object):
                 
     
     def _embed(self):
-        self.embedder = SallyBasedEmbedder()
+        # self.embedder = SallyBasedEmbedder()
+        self.embedder = Embedder()
         self.embedder.embed(self.outputDirectory)
     
     def _connectToDatabase(self):
@@ -48,9 +55,9 @@ class APIEmbedder(object):
 
     def _initializeOutputDirectory(self):
         directory = self.outputDirectory
+        
         if os.path.exists(directory):
-            sys.stderr.write('Warning: Output directory already exists and will not be overwritten.\n')
-            sys.exit()
+            raise
         
         self.dataDir = os.path.join(directory, 'data') 
         self.tocFilename = os.path.join(directory, 'TOC') 

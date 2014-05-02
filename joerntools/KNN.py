@@ -35,8 +35,7 @@ class KNN():
         
 
     def _loadValidNeighbors(self):
-        self.validNeighbors = [int(x) for x in
-                                   self.limit.readlines()]
+        self.validNeighbors = self.limit
 
     
     def getNeighborsFor(self, line):
@@ -50,7 +49,7 @@ class KNN():
         for i in self.emb.NNI[:, dataPointIndex]:
             
             if self.limit:
-                if not int(self.emb.TOC[i]) in self.validNeighbors:
+                if not self.emb.TOC[i] in self.validNeighbors:
                     continue
 
             neighbors.append(self.emb.TOC[i])
