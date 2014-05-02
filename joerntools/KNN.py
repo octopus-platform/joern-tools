@@ -64,18 +64,14 @@ class KNN():
         if not self.emb.dExists():
             self.emb.D = self._calculateDistanceMatrix()
      
-            if not self.no_cache:
-                self.saver.saveDistanceMatrix(self.emb)
-            
         if not self.emb.nnExists():
             self._calculateNearestNeighbors()
             if not self.no_cache:
                 self.saver.saveNearestNeighbors(self.emb)
             
     def _calculateNearestNeighbors(self):
-        self.emb.NNV = self.emb.D.copy()
         self.emb.NNI = self.emb.D.argsort(axis=0)
-        self.emb.NNV.sort(axis=0)
+       
         
     def _calculateDistanceMatrix(self):
         return pairwise_distances(self.emb.x, metric='cosine')

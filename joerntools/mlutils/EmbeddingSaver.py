@@ -1,6 +1,7 @@
 
 import cPickle as pickle
 from Embedding import *
+import h5py
 
 class EmbeddingSaver:
 
@@ -16,8 +17,8 @@ class EmbeddingSaver:
 
     def saveNearestNeighbors(self, emb):
         filename = self.dirname + NNI_FILENAME
-        pickle.dump(emb.NNI, file(filename, 'w'))
-
-        filename = self.dirname + NNV_FILENAME
-        pickle.dump(emb.NNV, file(filename, 'w'))
+        
+        f = h5py.File(filename, 'w')
+        f.create_dataset('distanceM', data=emb.NNI)
+        f.close()
         

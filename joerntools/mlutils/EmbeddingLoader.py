@@ -84,17 +84,12 @@ class EmbeddingLoader:
 
     def _loadDistances(self):
         
-        dFilename = self.dirname + D_FILENAME
-        if os.path.exists(dFilename):
-            self.emb.D = pickle.load(file(dFilename))
-
         nniFilename = self.dirname + NNI_FILENAME
-        nnvFilename = self.dirname + NNV_FILENAME
-        
+       
         if os.path.exists(nniFilename):
-            self.emb.NNI = pickle.load(file(nniFilename))
-            self.emb.NNV = pickle.load(file(nnvFilename))
-        
+            import h5py
+            self.emb.NNI = h5py.File(nniFilename, 'r')['distanceM']
+            
 
 if __name__ == '__main__':
     import sys
