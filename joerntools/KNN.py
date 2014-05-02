@@ -29,18 +29,18 @@ class KNN():
     
     def getNeighborsFor(self, funcId):
         
-        dataPointIndex = self.emb.rTOC[funcId]    
         nReturned = 0
 
         if self.limit:
-            validNeighborIds = self.limit
-            validNeighbors = [self.emb.rTOC[str(x)] for x in self.limit]
+            validNeighborIds = [funcId] + [x for x in self.limit if x != funcId]
+            validNeighbors = [self.emb.rTOC[str(x)] for x in validNeighborIds]
             
             X = self.emb.x[validNeighbors, :]
             D = pairwise_distances(X, metric='cosine')
-            NNI = list(D[0,:] .argsort(axis=0))[:self.k]
+            NNI = list(D[0,:].argsort(axis=0))[:self.k]
             return [validNeighborIds[x] for x in NNI]
         else:
+            dataPointIndex = self.emb.rTOC[funcId]    
             X = self.emb.x
             D = pairwise_distances(X, metric='cosine')
             NNI = list(D[dataPointIndex,:].argsort(axis=0))[:self.k]

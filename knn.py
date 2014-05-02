@@ -57,13 +57,13 @@ class KNNCLI(PipeTool):
     # @Override
     def processLine(self, line):
         
-        # try:
+        try:
             neighbors = self.knn.getNeighborsFor(line)
             for n in neighbors:
                 print n
-        # except KeyError:
-        # sys.stderr.write('Warning: no data point found for %s\n' %
-        #                     (line))
+        except KeyError:
+            sys.stderr.write('Warning: no data point found for %s\n' %
+                             (line))
 
 
 if __name__ == '__main__':
