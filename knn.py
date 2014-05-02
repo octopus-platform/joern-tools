@@ -40,7 +40,11 @@ class KNNCLI(PipeTool):
     def streamStart(self):
         
         self.knn.setEmbeddingDir(self.args.dirname)
-        self.knn.setLimitArray(self.args.limit)
+
+        if self.args.limit == None:
+            self.knn.setLimitArray(None)
+        else:
+            self.knn.setLimitArray([int(x) for x in self.args.limit.readlines()])
         self.knn.setK(self.args.k)
         self.knn.setNoCache(self.args.no_cache)
         

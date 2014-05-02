@@ -39,7 +39,6 @@ class EmbeddingLoader:
 
         self._loadFeatureTable()
         self._loadTOC()
-        self._loadDistances()
         return self.emb
     
     def _loadFeatureTable(self):
@@ -81,15 +80,7 @@ class EmbeddingLoader:
             name = TOCLines[int(label)]
             self.emb.rTOC[name] = i
             self.emb.TOC.append(name)
-
-    def _loadDistances(self):
-        
-        nniFilename = self.dirname + NNI_FILENAME
-       
-        if os.path.exists(nniFilename):
-            import h5py
-            self.emb.NNI = h5py.File(nniFilename, 'r')['distanceM']
-            
+    
 
 if __name__ == '__main__':
     import sys

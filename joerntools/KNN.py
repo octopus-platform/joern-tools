@@ -1,14 +1,11 @@
 
 from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
-from joerntools.mlutils.EmbeddingSaver import EmbeddingSaver
 from sklearn.metrics.pairwise import pairwise_distances
 
 
 class KNN():
     def __init__(self):
         self.loader = EmbeddingLoader()
-        self.saver = EmbeddingSaver() 
-
     
     def setEmbeddingDir(self, dirname):
         self.dirname = dirname
@@ -25,53 +22,35 @@ class KNN():
     def initialize(self):
         
         self.emb = self._loadEmbedding(self.dirname)
-        if self.limit:
-            self._loadValidNeighbors()
-
 
     def _loadEmbedding(self, dirname):
-        self.saver.setEmbeddingDir(dirname)
         return self.loader.load(dirname, tfidf=False, svd_k=0)
         
-
-    def _loadValidNeighbors(self):
-        self.validNeighbors = self.limit
-
     
-    def getNeighborsFor(self, line):
-        self.calculateDistances()
+    def getNeighborsFor(self, funcId):
         
-        dataPointIndex = self.emb.rTOC[line]    
+        dataPointIndex = self.emb.rTOC[funcId]    
         nReturned = 0
-            
-        neighbors = []
-            
-        for i in self.emb.NNI[:, dataPointIndex]:
-            
-            if self.limit:
-                if not self.emb.TOC[i] in self.validNeighbors:
-                    continue
 
-            neighbors.append(self.emb.TOC[i])
-            nReturned += 1
-            
-            if nReturned == self.k:
-                break
+        if self.limit:
+            validNeighbors = [dataPointIndex] +  self.limit
+            X = self.emb.x[validNeighbors, :]
+            D = pairwise_distances(X, metric='cosine')
+            NNI = list(D[0,:] .argsort(axis=0))[:self.k]
+            return [validNeighbors[x] for x in NNI]
+        else:
+            X = self.emb.x
+            D = pairwise_distances(X, metric='cosine')
+            NNI = list(D[dataPointIndex,:].argsort(axis=0))[:self.k]
+            return [self.emb.TOC[x] for x in NNI]
 
-        return neighbors
-    
     def calculateDistances(self):
-        if not self.emb.dExists():
-            self.emb.D = self._calculateDistanceMatrix()
-     
-        if not self.emb.nnExists():
-            self._calculateNearestNeighbors()
-            if not self.no_cache:
-                self.saver.saveNearestNeighbors(self.emb)
-            
+        
+        self.emb.D = self._calculateDistanceMatrix()
+        self._calculateNearestNeighbors()
+        
     def _calculateNearestNeighbors(self):
         self.emb.NNI = self.emb.D.argsort(axis=0)
-       
         
     def _calculateDistanceMatrix(self):
         return pairwise_distances(self.emb.x, metric='cosine')
