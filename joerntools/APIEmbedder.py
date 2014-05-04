@@ -70,17 +70,40 @@ class APIEmbedder(object):
         self.toc.close()
 
     def _getAPISymbolsFromDatabase(self):
+    
+        CHUNK_SIZE = 1024
+    
+        query = """queryNodeIndex('type:Function').id"""
+        functionIds = self._runGremlinQuery(query)
+
+        result = []
+
+        for chunk in self.chunks(functionIds, CHUNK_SIZE):
+            query = """
+            _().transform{ %s }.scatter().transform{g.v(it)}
+            .sideEffect{funcId = it.id}
+            .transform{ [funcId, it.functionToAPISymbolNodes().code.toList()] }
+            """ % (str(chunk))
+
+            result.extend(self._runGremlinQuery(query))
         
+        return result
+
         # Fetch all API symbols in a single query. Might be
         # smarter to split this into multiple queries for large
         # codebases.
         
-        query = """
-        queryNodeIndex('type:Function').sideEffect{funcId = it.id}
-        .transform{ [funcId, it.functionToAPISymbolNodes().code.toList()] }
-        """
-        return self._runGremlinQuery(query)
+        # query = """
+        # queryNodeIndex('type:Function')
+        # .sideEffect{funcId = it.id}
+        # .transform{ [funcId, it.functionToAPISymbolNodes().code.toList()] }
+        # """
+        # return self._runGremlinQuery(query)
          
+    def chunks(self, l, n):
+        for i in xrange(0, len(l), n):
+            yield l[i:i+n]
+    
     def _runGremlinQuery(self, query):
         return self.dbInterface.runGremlinQuery(query)
     
