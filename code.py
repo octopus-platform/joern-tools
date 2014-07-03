@@ -26,7 +26,7 @@ class CodeTool(PipeTool):
 
     def _openFileOrFail(self, filename):
         try:
-            f = codecs.open(filename, 'r', 'utf-8')
+            f = open(filename, 'r')
         except IOError:
             sys.stderr.write('Error: %s: no such file or directory\n'
                              % filename)
