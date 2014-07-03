@@ -6,6 +6,7 @@ from joerntools.view.ParseLocationString import parseLocationOrFail
 from joerntools.shelltool.PipeTool import PipeTool
 
 import codecs
+import chardet
 
 DESCRIPTION = """Read filename:startLine:startPos:startIndex:stopIndex
 from standard input and output the respective code."""
@@ -20,23 +21,33 @@ class CodeTool(PipeTool):
         (filename, startLine, startPos, startIndex, stopIndex)\
             = parseLocationOrFail(line)
         
-        f = self._openFileOrFail(filename)
-        content = self._extractContent(f, startIndex, stopIndex)
-        self.output(content + '\n')
+        self._openFileOrFail(filename)
+        content = self._extractContent(startIndex, stopIndex)
+        self.output(content.encode('utf-8') + '\n')
 
     def _openFileOrFail(self, filename):
+        
         try:
-            f = open(filename, 'r')
+            f = codecs.open(filename, 'r', 'utf-8')
+            self.fileContent = ''.join(f.readlines())
         except IOError:
             sys.stderr.write('Error: %s: no such file or directory\n'
                              % filename)
             sys.exit()
-        return f
+        except:
+            g = open(filename, "r")
+            rawdata = ''.join(g.readlines())
+            g.close()
+            result = chardet.detect(rawdata)
+            charenc = result['encoding']
+            f = codecs.open(filename, 'r', charenc)
+            self.fileContent = ''.join(f.readlines())
         
-    def _extractContent(self, f, startIndex, stopIndex):
-        fileContent = ''.join(f.readlines())
-        content = fileContent[startIndex:stopIndex+1]
         f.close()
+        
+    def _extractContent(self, startIndex, stopIndex):
+        
+        content = self.fileContent[startIndex:stopIndex+1]
         return content        
 
 if __name__ == '__main__':
