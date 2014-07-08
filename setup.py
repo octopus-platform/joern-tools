@@ -9,7 +9,7 @@ def read(fname):
 def getScripts():
     x = []
     for (dirpath, dirnames, filenames) in os.walk('tools'):
-        x.extend(os.path.join(dirpath,f) for f in filenames if f.endswith('.py'))
+        x.extend(os.path.join(dirpath,f) for f in filenames)
     return x
 
 setup(
