@@ -33,14 +33,14 @@ class Location(LookupTool):
              .functionToFile()
              .sideEffect{filename = it.filepath; }
             }{
-             it.ifThenElse{it.type == 'BasicBlock'}{
-               it.sideEffect{loc = it.location}.basicBlockToAST()
-               .astNodeToFunction().functionToFile()
+             it.ifThenElse{it.isCFGNode == 'True'}{
+               it.sideEffect{loc = it.location}
+               .functions().functionToFile()
                .sideEffect{filename = it.filepath; }
              }{
               // AST node
-              it.astNodeToBasicBlock().sideEffect{loc = it.location; }
-              .basicBlockToAST().astNodeToFunction()
+              it.statements().sideEffect{loc = it.location; }
+              .functions()
               .functionToFile().sideEffect{filename = it.filepath; }
               }
            }
