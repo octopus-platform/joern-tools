@@ -1,0 +1,116 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.JoernTool import JoernTool
+
+"""
+- Both forward and backward slices can be calculated. The exact
+behaviour depends on the node type.
+
+- Statements/Conditions: The slice is calculated for all symbols
+  used/defined by the statement.
+
+- Arguments: The slice is calculated for all symbols used/defined in
+  the specified argument.
+
+- AssignmentExpr: The forward slice is calculated for all symbols
+  occuring on the left hand side of the assignment, the backward slice
+  is calculated as usual.
+
+In summary, this allows the following kinds of slices to be extracted: 
+
+- Forward/backward slices considering all symbols
+- Forward slices considering function return values
+- Forward/backward slices for symbols occuring in the i'th argument of
+  calls.
+
+Output format:
+==============
+
+SeedNodeId NodeId OutEdgeId_1 .... OutEdgeId_2
+
+"""
+
+DESCRIPTION = """Extracts program slices."""
+
+class SliceTool(JoernTool):
+    pass
+
+    def __init__(self, DESCRIPTION):
+        JoernTool.__init__(self, DESCRIPTION)
+        
+        self.argParser.add_argument(
+            '-s', '--slice-direction',
+            action = 'store',
+            choices = ['forward', 'backwards'],
+            default = 'forward',
+            help = """The slicing direction""")
+
+    
+    def processLine(self, line):
+        nodeId = int(line)
+        
+        # TODO: we can gain a lot of speed by accumulating nodes
+        # and sending off a single query. It's probably best to
+        # create a generic 'AccumulateTool' that does this.
+        
+        query = self._createQueryForNode(nodeId)
+        
+        for (seedPointId, nodeId, edgeIds) in self._runGremlinQuery(query):
+            
+            edgeIdStr = ' '.join([str(x) for x in edgeIds])
+
+            self.output(str(seedPointId) + "\t" + str(nodeId) + "\t" + edgeIdStr + "\n")
+        
+    def _createQueryForNode(self, nodeId):
+        if self.args.slice_direction == 'forward':
+            return self._createForwardQueryForNode(nodeId)
+        else:
+            return self._createBackwardQueryForNode(nodeId)
+    
+    def _createForwardQueryForNode(self, nodeId):
+        
+        forwardQuery = """
+        g.v(%d)._()
+        .sideEffect
+        {
+           seedNodeId = it.id;
+
+           if(it.type == 'AssignmentExpr'){
+                 symbols = it.lval().code.toList()
+           } else if(it.type == 'Argument'){
+                 symbols = it.defines().code.toList()
+           } else{
+                 symbols = it.statements().out('USE', 'DEF').code.toList()
+           }
+        }.scatter().statements().transform{
+            it.forwardSlice(symbols).toList()
+        }.scatter()
+        .transform{ [seedNodeId, it.id, it.outE().id.toList()] }
+        """ % (nodeId)
+        
+        return forwardQuery
+
+    def _createBackwardQueryForNode(self, nodeId):
+        
+        backwardQuery = """
+        g.v(%d)._()
+        .sideEffect
+        {
+          seedNodeId = it.id;
+
+          if(it.type == 'Argument'){
+                 symbols = it.uses().code.toList()
+           } else{
+                 symbols = it.statements().out('USE', 'DEF').code.toList()
+            }
+        }.scatter().statements().transform{
+            it.backwardSlice(symbols).toList()
+        }.scatter()
+        .transform{ [seedNodeId, it.id, it.outE().id.toList()] }
+        """ % (nodeId)
+        
+        return backwardQuery
+       
+if __name__ == '__main__':
+    tool = SliceTool(DESCRIPTION)
+    tool.run()
