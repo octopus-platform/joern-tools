@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 
 import sys, argparse
-from joern.all import JoernSteps
 from joerntools.view.ParseLocationString import parseLocationOrFail
 from joerntools.shelltool.PipeTool import PipeTool
 
