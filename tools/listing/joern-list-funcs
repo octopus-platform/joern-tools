@@ -1,21 +1,27 @@
 #!/usr/bin/env python2
 
+from joerntools.shelltool.StartTool import StartTool
 
+DESCRIPTION = """Create a list of all functions of the code base. The
+first field is the function's name, the second field is the id of the
+corresponding node in the database."""
+
+class ListFuncs(StartTool):
+      
+      def __init__(self, DESCRIPTION):
+            StartTool.__init__(self, DESCRIPTION)
+
+      def _constructQuery(self):
+            return """
+            queryNodeIndex('type:Function').transform{ it.name + "\t" + it.id }
+            """
+      def _handleResult(self, res):
+            for x in res:
+                  print x
+
+      
 
 if __name__ == '__main__':
-   
-   # list all functions for now. Could include a filter expression
-   # later to speedup traversal
-   
-   from joern.all import JoernSteps
-   
-   j = JoernSteps()
-   j.connectToDatabase()
-
-   query = """
-   queryNodeIndex('type:Function').transform{ it.name + "\t" + it.id }
-   """
-   
-   for x in j.runGremlinQuery(query):
-      print x
+      tool = ListFuncs(DESCRIPTION)
+      tool.run()
    

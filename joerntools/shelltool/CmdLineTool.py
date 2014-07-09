@@ -9,7 +9,6 @@ class CmdLineTool:
 
     def _initializeOptParser(self):
         self.argParser = ArgumentParser(description = self.description)
-
     
     def run(self):
         """ Run the tool. Call this function after all additional
