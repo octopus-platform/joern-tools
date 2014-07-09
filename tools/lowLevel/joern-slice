@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.JoernTool import JoernTool
+from joerntools.shelltool.AccTool import AccTool
 
 """
 - Both forward and backward slices can be calculated. The exact
@@ -31,11 +31,11 @@ SeedNodeId TAB NodeId_1 ... NodeId_m TAB EdgeId_1 .... EdgeId_n
 
 DESCRIPTION = """Extracts program slices."""
 
-class SliceTool(JoernTool):
+class SliceTool(AccTool):
     pass
 
     def __init__(self, DESCRIPTION):
-        JoernTool.__init__(self, DESCRIPTION)
+        AccTool.__init__(self, DESCRIPTION)
         
         self.argParser.add_argument(
             '-s', '--slice-direction',
@@ -45,14 +45,9 @@ class SliceTool(JoernTool):
             help = """The slicing direction""")
 
     
-    def processLine(self, line):
-        nodeId = int(line)
-        
-        # TODO: we can gain a lot of speed by accumulating nodes
-        # and sending off a single query. It's probably best to
-        # create a generic 'AccumulateTool' that does this.
-        
-        query = self._createQueryForNode(nodeId)
+    def processBatch(self, nodeIds):
+
+        query = self._createQueryForNode(nodeIds)
         
         for (seedPointId, nodeIds, edgeIds) in self._runGremlinQuery(query):
             
@@ -61,16 +56,16 @@ class SliceTool(JoernTool):
 
             self.output(str(seedPointId) + "\t" + nodeIdStr + "\t" + edgeIdStr + "\n")
         
-    def _createQueryForNode(self, nodeId):
+    def _createQueryForNode(self, nodeIds):
         if self.args.slice_direction == 'forward':
-            return self._createForwardQueryForNode(nodeId)
+            return self._createForwardQueryForNode(nodeIds)
         else:
-            return self._createBackwardQueryForNode(nodeId)
+            return self._createBackwardQueryForNode(nodeIds)
     
-    def _createForwardQueryForNode(self, nodeId):
+    def _createForwardQueryForNode(self, nodeIds):
         
         forwardQuery = """
-        g.v(%d)._()
+        idListToNodes(%s)
         .sideEffect
         {
            seedNodeId = it.id;
@@ -82,18 +77,18 @@ class SliceTool(JoernTool):
            } else{
                  symbols = it.statements().out('USE', 'DEF').code.toList()
            }
-        }.scatter().statements().transform{
+        }.statements().transform{
             nodes = it.forwardSlice(symbols).id.toList()
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
-        """ % (nodeId)
+        """ % (nodeIds)
         
         return forwardQuery
 
-    def _createBackwardQueryForNode(self, nodeId):
+    def _createBackwardQueryForNode(self, nodeIds):
         
         backwardQuery = """
-        g.v(%d)._()
+        idListToNodes(%s)
         .sideEffect
         {
           seedNodeId = it.id;
@@ -103,11 +98,11 @@ class SliceTool(JoernTool):
            } else{
                  symbols = it.statements().out('USE', 'DEF').code.toList()
             }
-        }.scatter().statements().transform{
+        }.statements().transform{
             nodes = it.backwardSlice(symbols).id.toList()
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
-        """ % (nodeId)
+        """ % (nodeIds)
         
         return backwardQuery
        
