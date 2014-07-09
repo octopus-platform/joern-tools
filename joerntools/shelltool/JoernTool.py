@@ -1,6 +1,6 @@
 
 from joerntools.shelltool.PipeTool import PipeTool
-from joern.all import JoernSteps
+from joerntools.DBInterface import DBInterface
 
 class JoernTool(PipeTool):
     
@@ -9,12 +9,9 @@ class JoernTool(PipeTool):
     
     # @Override
     def streamStart(self):
-        self._connectToDatabase()
-    
-    def _connectToDatabase(self):
-        self.j = JoernSteps()
-        self.j.connectToDatabase()
+        self.dbInterface = DBInterface()
+        self.dbInterface.connectToDatabase()
     
     def _runGremlinQuery(self, query):
-        return self.j.runGremlinQuery(query)
+        return self.dbInterface.runGremlinQuery(query)
     

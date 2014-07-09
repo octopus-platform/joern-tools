@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 
 from joerntools.shelltool.GraphvizTool import GraphvizTool
-from joerntools.shelltool.JoernTool import JoernTool
 from joerntools.DBInterface import DBInterface
 
 DESCRIPTION = """Highlights the program slice of the given slicing criterion
