@@ -2,7 +2,6 @@
 
 import sys, os
 from TraversalTool import TraversalTool
-from joern.all import JoernSteps
 
 class LookupTool(TraversalTool):
     

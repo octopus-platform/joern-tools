@@ -48,7 +48,7 @@ class Location(LookupTool):
         
         """ % (id)
 
-        y = self.j.runGremlinQuery(query)
+        y = self._runGremlinQuery(query)
         for x in y:
             print x
         
