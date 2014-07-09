@@ -5,7 +5,7 @@ from PipeTool import PipeTool
 
 """ A tool processing lines where the first field is interpreted as a
 key. Lines are accumulated until the key changes or the end of the
-file is encountered."""
+file is encountered. Tab is the only delimiter."""
 
 class DemuxTool(PipeTool):
     
