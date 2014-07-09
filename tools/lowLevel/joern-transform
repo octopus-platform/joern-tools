@@ -1,0 +1,24 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.JoernTool import JoernTool
+
+DESCRIPTION = """ inject lines into database query """
+
+class TransformTool(JoernTool):
+
+    def __init__(self, DESCRIPTION):
+        JoernTool.__init__(self, DESCRIPTION)
+        self.argParser.add_argument("fmt")
+    
+    def processLine(self, line):
+        
+        line = line.rstrip()
+        query = self.args.fmt % (line)
+        
+        for x in self._runGremlinQuery(query):
+            self.output(str(x) + "\n")
+        
+
+if __name__ == '__main__':
+   tool = TransformTool(DESCRIPTION)
+   tool.run()
