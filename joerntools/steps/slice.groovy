@@ -1,5 +1,6 @@
 Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbol ->
-	_()
+	 MAX_LOOPS = 5;
+  	_()
 	.copySplit(
 		_(),
 		_().transform{
@@ -8,13 +9,14 @@ Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbol ->
 			.filter{it.label == 'CONTROLS' || !first || it.var == symbol}
 			.inV().gather{it}.scatter()
 			.sideEffect{first = false}
-			.loop(4){it.loops < 5}{true}
+			.loop(4){it.loops < MAX_LOOPS}{true}
 		}.scatter()
 	).fairMerge()
 	.dedup()
 });
 
 Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbol ->
+	MAX_LOOPS = 5;
 	_()
 	.copySplit(
 		_(),
@@ -24,8 +26,47 @@ Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbol ->
 			.filter{it.label == 'CONTROLS' || !first || it.var == symbol}
 			.outV().gather{it}.scatter()
 			.sideEffect{first = false}
-			.loop(4){it.loops < 5}{true}
+			.loop(4){it.loops < MAX_LOOPS}{true}
 		}.scatter()
 	).fairMerge()
 	.dedup()
 });
+
+/**
+   Starting from an argument node, slice backwards, but for data flow,
+   consider only the symbols actually used in the argument.
+*/
+
+Gremlin.defineStep('sliceBackFromArgument', [Vertex, Pipe], {
+	_().transform{
+		symbols = it.uses().code.toList();
+		it.statements().backwardSlice(symbols)
+	}.scatter()
+})
+
+/**
+   Starting from an argument node, slice forward, but for data flow,
+   consider only the symbols actually used in the argument.
+*/
+
+Gremlin.defineStep('sliceForwardFromArgument', [Vertex, Pipe], {
+	_().transform{
+		symbols = it.uses().code.toList();
+		it.statements().forwardSlice(symbols)
+	}.scatter()
+})
+
+/**
+   Slice forward from assignment, but for data flow, consider only the
+   symbols defined on the left-hand side of the assignment.
+*/
+
+Gremlin.defineStep('sliceForwardFromAssign', [Vertex, Pipe], {
+	_()
+	.transform
+	{
+      		callee = it.code;
+      		symbols = it.lval().code.toList()
+		it.statements().forwardSlice(symbols)
+	}.scatter()
+})
