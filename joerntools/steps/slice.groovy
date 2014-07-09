@@ -1,4 +1,4 @@
-Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbol ->
+Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbols ->
 	 MAX_LOOPS = 5;
   	_()
 	.copySplit(
@@ -6,7 +6,7 @@ Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbol ->
 		_().transform{
 			it.sideEffect{first = true;}
 			.outE('REACHES', 'CONTROLS')
-			.filter{it.label == 'CONTROLS' || !first || it.var == symbol}
+			.filter{it.label == 'CONTROLS' || !first || it.var in symbols}
 			.inV().gather{it}.scatter()
 			.sideEffect{first = false}
 			.loop(4){it.loops < MAX_LOOPS}{true}
@@ -15,7 +15,7 @@ Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbol ->
 	.dedup()
 });
 
-Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbol ->
+Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbols ->
 	MAX_LOOPS = 5;
 	_()
 	.copySplit(
@@ -23,7 +23,7 @@ Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbol ->
 		_().transform{
 			it.sideEffect{first = true;}
 			.inE('REACHES', 'CONTROLS')
-			.filter{it.label == 'CONTROLS' || !first || it.var == symbol}
+			.filter{it.label == 'CONTROLS' || !first || it.var in symbols}
 			.outV().gather{it}.scatter()
 			.sideEffect{first = false}
 			.loop(4){it.loops < MAX_LOOPS}{true}

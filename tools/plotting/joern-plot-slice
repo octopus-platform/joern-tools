@@ -50,9 +50,9 @@ class ProgramSlice(GraphvizTool):
     def _getSliceNodes(self, stmt_id, symbol):
 
         if self.args.slice_type == 'forward':
-            query = """g.v(%s).forwardSlice('%s')""" % (stmt_id, symbol)
+            query = """g.v(%s).forwardSlice(['%s'])""" % (stmt_id, symbol)
         else:
-            query = """g.v(%s).backwardSlice('%s')""" % (stmt_id, symbol)
+            query = """g.v(%s).backwardSlice(['%s'])""" % (stmt_id, symbol)
         self._connectToDatabase()
         return self._runGremlinQuery(query)
 
