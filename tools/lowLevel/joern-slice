@@ -26,8 +26,7 @@ In summary, this allows the following kinds of slices to be extracted:
 Output format:
 ==============
 
-SeedNodeId NodeId OutEdgeId_1 .... OutEdgeId_2
-
+SeedNodeId TAB NodeId_1 ... NodeId_m TAB EdgeId_1 .... EdgeId_n
 """
 
 DESCRIPTION = """Extracts program slices."""
@@ -55,11 +54,12 @@ class SliceTool(JoernTool):
         
         query = self._createQueryForNode(nodeId)
         
-        for (seedPointId, nodeId, edgeIds) in self._runGremlinQuery(query):
+        for (seedPointId, nodeIds, edgeIds) in self._runGremlinQuery(query):
             
+            nodeIdStr = ' '.join([str(x) for x in nodeIds])
             edgeIdStr = ' '.join([str(x) for x in edgeIds])
 
-            self.output(str(seedPointId) + "\t" + str(nodeId) + "\t" + edgeIdStr + "\n")
+            self.output(str(seedPointId) + "\t" + nodeIdStr + "\t" + edgeIdStr + "\n")
         
     def _createQueryForNode(self, nodeId):
         if self.args.slice_direction == 'forward':
@@ -83,9 +83,9 @@ class SliceTool(JoernTool):
                  symbols = it.statements().out('USE', 'DEF').code.toList()
            }
         }.scatter().statements().transform{
-            it.forwardSlice(symbols).toList()
-        }.scatter()
-        .transform{ [seedNodeId, it.id, it.outE().id.toList()] }
+            nodes = it.forwardSlice(symbols).id.toList()
+            [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
+        }
         """ % (nodeId)
         
         return forwardQuery
@@ -104,9 +104,9 @@ class SliceTool(JoernTool):
                  symbols = it.statements().out('USE', 'DEF').code.toList()
             }
         }.scatter().statements().transform{
-            it.backwardSlice(symbols).toList()
-        }.scatter()
-        .transform{ [seedNodeId, it.id, it.outE().id.toList()] }
+            nodes = it.backwardSlice(symbols).id.toList()
+            [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
+        }
         """ % (nodeId)
         
         return backwardQuery
