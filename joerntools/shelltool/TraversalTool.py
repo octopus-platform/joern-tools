@@ -1,24 +1,20 @@
 
 from PipeTool import PipeTool
-from joern.all import JoernSteps
+from joerntools.shelltool.JoernTool import JoernTool
 
-class TraversalTool(PipeTool):
+class TraversalTool(JoernTool):
     
     def __init__(self, DESCRIPTION):
-        PipeTool.__init__(self, DESCRIPTION)
-
-    # @Override
-    def streamStart(self):
-        self.j = JoernSteps()
-        self.j.connectToDatabase()
+        JoernTool.__init__(self, DESCRIPTION)
     
     # @Override
     def processLine(self, line):
         query = self.queryFromLine(line)
 
-        y = self.j.runGremlinQuery(query)
+        y = self._runGremlinQuery(query)
         self.outputResult(y)
-
+    
+    # @Override
     def queryFromLine(self, line):
         return line
     

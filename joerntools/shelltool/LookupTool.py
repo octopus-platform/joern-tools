@@ -30,7 +30,6 @@ class LookupTool(TraversalTool):
                                     default = [])
 
     # @Override
-
     def queryFromLine(self, line):
         
         if self.args.gremlin:
