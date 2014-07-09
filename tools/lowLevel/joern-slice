@@ -12,9 +12,9 @@ behaviour depends on the node type.
 - Arguments: The slice is calculated for all symbols used/defined in
   the specified argument.
 
-- AssignmentExpr: The forward slice is calculated for all symbols
-  occuring on the left hand side of the assignment, the backward slice
-  is calculated as usual.
+- Callees: The forward slice is calculated for all symbols
+  occuring on the left hand side of the assignment (return value), the
+  backward slice is calculated for the statement.
 
 In summary, this allows the following kinds of slices to be extracted: 
 
@@ -70,8 +70,11 @@ class SliceTool(AccTool):
         {
            seedNodeId = it.id;
 
-           if(it.type == 'AssignmentExpr'){
-                 symbols = it.lval().code.toList()
+           if(it.type == 'Callee'){
+        
+    		symbols = it.matchParents{it.type == 'AssignmentExpr'}
+			  .lval().code.toList()
+        
            } else if(it.type == 'Argument'){
                  symbols = it.defines().code.toList()
            } else{
