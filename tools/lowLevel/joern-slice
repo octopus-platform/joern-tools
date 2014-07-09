@@ -26,7 +26,7 @@ In summary, this allows the following kinds of slices to be extracted:
 Output format:
 ==============
 
-SeedNodeId TAB NodeId_1 ... NodeId_m TAB EdgeId_1 .... EdgeId_n
+label TAB NodeId_1 ... NodeId_m TAB EdgeId_1 .... EdgeId_n
 """
 
 DESCRIPTION = """Extracts program slices."""
@@ -43,6 +43,12 @@ class SliceTool(AccTool):
             choices = ['forward', 'backwards'],
             default = 'forward',
             help = """The slicing direction""")
+
+        self.argParser.add_argument(
+            '-l', '--label',
+            action = 'store',
+            default = "it.id",
+            help = """Traversal for labeling""")
 
     
     def processBatch(self, nodeIds):
@@ -68,7 +74,7 @@ class SliceTool(AccTool):
         idListToNodes(%s)
         .sideEffect
         {
-           seedNodeId = it.id;
+           seedNodeId = %s;
 
            if(it.type == 'Callee'){
         
@@ -84,7 +90,7 @@ class SliceTool(AccTool):
             nodes = it.forwardSlice(symbols).id.toList()
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
-        """ % (nodeIds)
+        """ % (nodeIds, self.args.label)
         
         return forwardQuery
 
