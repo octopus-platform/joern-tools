@@ -24,7 +24,7 @@ class KNN():
         self.emb = self._loadEmbedding(self.dirname)
 
     def _loadEmbedding(self, dirname):
-        return self.loader.load(dirname, tfidf=False, svd_k=0)
+        return self.loader.load(dirname, tfidf=False, svd_k=200)
         
     
     def getNeighborsFor(self, funcId):

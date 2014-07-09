@@ -100,7 +100,7 @@ class SliceTool(AccTool):
         idListToNodes(%s)
         .sideEffect
         {
-          seedNodeId = it.id;
+          seedNodeId = %s;
 
           if(it.type == 'Argument'){
                  symbols = it.uses().code.toList()
@@ -111,7 +111,7 @@ class SliceTool(AccTool):
             nodes = it.backwardSlice(symbols).id.toList()
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
-        """ % (nodeIds)
+        """ % (nodeIds, self.args.label)
         
         return backwardQuery
        
