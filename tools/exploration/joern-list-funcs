@@ -11,10 +11,15 @@ class ListFuncs(StartTool):
       def __init__(self, DESCRIPTION):
             StartTool.__init__(self, DESCRIPTION)
 
+            self.argParser.add_argument('-p', '--pattern',
+                                        action = 'store', type=str,
+                                        default ="*")
+
       def _constructQuery(self):
             return """
-            queryNodeIndex('type:Function').transform{ it.name + "\t" + it.id }
-            """
+            queryNodeIndex('type:Function AND name:%s').transform{ it.name + "\t" + it.id }
+            """ % (self.args.pattern)
+
       def _handleResult(self, res):
             for x in res:
                   print x
