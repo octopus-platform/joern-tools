@@ -1,30 +1,32 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.StartTool import StartTool
+from joerntools.shelltool.ChunkStartTool import ChunkStartTool
 
 DESCRIPTION = """Create a list of all functions of the code base. The
 first field is the function's name, the second field is the id of the
 corresponding node in the database."""
 
-class ListFuncs(StartTool):
+class ListFuncs(ChunkStartTool):
       
       def __init__(self, DESCRIPTION):
-            StartTool.__init__(self, DESCRIPTION)
-
+            ChunkStartTool.__init__(self, DESCRIPTION)
+	    
             self.argParser.add_argument('-p', '--pattern',
                                         action = 'store', type=str,
                                         default ="*")
 
-      def _constructQuery(self):
+      def _constructIdQuery(self):
             return """
-            queryNodeIndex('type:Function AND name:%s').transform{ it.name + "\t" + it.id }
+            queryNodeIndex('type:Function AND name:%s').id
             """ % (self.args.pattern)
 
-      def _handleResult(self, res):
+      def _constructQueryForChunk(self, chunk):
+            return """idListToNodes(%s).transform{ it.name + "\t" + it.id }""" % (chunk)
+
+      def _handleChunkResult(self, res, chunk):
             for x in res:
                   print x
 
-      
 
 if __name__ == '__main__':
       tool = ListFuncs(DESCRIPTION)

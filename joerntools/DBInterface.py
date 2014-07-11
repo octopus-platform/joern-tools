@@ -14,3 +14,6 @@ class DBInterface:
     def runGremlinQuery(self, query):
         return self.j.runGremlinQuery(query)
     
+    def chunks(self, ids, chunkSize):
+        return self.j.chunks(ids, chunkSize)
+    
