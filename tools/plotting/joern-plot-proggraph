@@ -127,7 +127,7 @@ class ProgramGraph(JoernTool):
 
     def _createDotGraph(self, function_id):
 
-        G = pgv.AGraph(directed = True)
+        G = pgv.AGraph(directed = True, strict = False)
 
         self._addCFGNodes(G, self._getCFGNodes(function_id))
         self._addSymbolNodes(G, self._getSymbolNodes(function_id))
