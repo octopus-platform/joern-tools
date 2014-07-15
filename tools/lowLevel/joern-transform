@@ -1,19 +1,18 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.JoernTool import JoernTool
+from joerntools.shelltool.AccTool import AccTool
 
 DESCRIPTION = """ inject lines into database query """
 
-class TransformTool(JoernTool):
+class TransformTool(AccTool):
 
     def __init__(self, DESCRIPTION):
-        JoernTool.__init__(self, DESCRIPTION)
+        AccTool.__init__(self, DESCRIPTION)
         self.argParser.add_argument("fmt")
     
-    def processLine(self, line):
+    def processBatch(self, nodeIds):
         
-        line = line.rstrip()
-        query = self.args.fmt % (line)
+        query = """ idListToNodes(%s).transform{ %s } """ % (nodeIds, self.args.fmt)
         
         for x in self._runGremlinQuery(query):
             self.output(str(x) + "\n")
