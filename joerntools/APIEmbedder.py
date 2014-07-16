@@ -1,5 +1,5 @@
 from joerntools.DBInterface import DBInterface
-from joerntools.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder
+# from joerntools.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder
 
 import os
 from joerntools.mlutils.pythonEmbedder.PythonEmbedder import Embedder
@@ -89,17 +89,6 @@ class APIEmbedder(object):
         
         return result
 
-        # Fetch all API symbols in a single query. Might be
-        # smarter to split this into multiple queries for large
-        # codebases.
-        
-        # query = """
-        # queryNodeIndex('type:Function')
-        # .sideEffect{funcId = it.id}
-        # .transform{ [funcId, it.functionToAPISymbolNodes().code.toList()] }
-        # """
-        # return self._runGremlinQuery(query)
-         
     def chunks(self, l, n):
         for i in xrange(0, len(l), n):
             yield l[i:i+n]

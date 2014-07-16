@@ -4,4 +4,4 @@ Machine Learning Tools
 .. toctree::
 	:maxdepth: 2
 
-	astEmbedding
+	embedding

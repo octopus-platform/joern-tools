@@ -1,6 +1,6 @@
 
 """
-A shell tool that constructs queries from arguments and flags and
+A shell tool that constructs queries from arguments and flags, then
 outputs results. In contrast to StartTool, this tool performs chunking
 to increase performance.
 """
@@ -27,10 +27,19 @@ class ChunkStartTool(CmdLineTool):
     def handleChunkResult(self, res, chunk):
         pass
 
+    # @Override
+    def _start(self):
+        pass
+
+    def _stop(self):
+        pass
+
     def _runImpl(self):
         
         self.dbInterface = DBInterface()
         self.dbInterface.connectToDatabase()
+
+        self._start()
 
         query = self._constructIdQuery()
         ids = self.dbInterface.runGremlinQuery(query)
@@ -40,4 +49,4 @@ class ChunkStartTool(CmdLineTool):
             res = self.dbInterface.runGremlinQuery(query)
             self._handleChunkResult(res, chunk)
 
-    
+        self._stop()

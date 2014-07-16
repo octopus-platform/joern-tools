@@ -1,0 +1,49 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.ChunkStartTool import ChunkStartTool
+
+from joerntools.mlutils.EmbeddingDir import EmbeddingDir
+from joerntools.mlutils.pythonEmbedder.PythonEmbedder import Embedder
+
+DESCRIPTION = """ """
+
+DEFAULT_DIRNAME = 'embedding'
+
+class JoernAPIEmbedder(ChunkStartTool):
+    def __init__(self):
+        ChunkStartTool.__init__(self, DESCRIPTION)
+        self.embeddingDir = EmbeddingDir()
+
+        self.argParser.add_argument('-d', '--dirname', nargs='?',
+                                    type = str, help="""The directory to write the embedding to.""",
+                                    default = DEFAULT_DIRNAME)
+    def _start(self):
+        self.embeddingDir.create(self.args.dirname)
+    
+    def _constructIdQuery(self):
+
+        return """queryNodeIndex('type:Function').id"""
+    
+    def _constructQueryForChunk(self, chunk):
+        return """
+        idListToNodes(%s)
+        .transform{ [it.id, it.functionToAPISymbolNodes().code.toList()] }
+        """ % (str(chunk))
+        
+    def _handleChunkResult(self, res, chunk):
+        
+        for (funcId, strings) in res:
+            self.embeddingDir.addDataPoint(funcId, strings)
+        
+    def _stop(self):
+        self.embeddingDir.finalize()
+        self._embed()
+
+    def _embed(self):
+        # self.embedder = SallyBasedEmbedder()
+        self.embedder = Embedder()
+        self.embedder.embed(self.args.dirname)
+
+if __name__ == '__main__':
+    tool = JoernAPIEmbedder()
+    tool.run()
