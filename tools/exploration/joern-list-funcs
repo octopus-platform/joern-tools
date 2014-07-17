@@ -21,7 +21,7 @@ class ListFuncs(ChunkStartTool):
             """ % (self.args.pattern)
 
       def _constructQueryForChunk(self, chunk):
-            return """idListToNodes(%s).transform{ it.name + "\t" + it.id }""" % (chunk)
+            return """idListToNodes(%s).transform{ it.name + "\t" + it.id + "\t" + it.functionToFile().filepath.toList()[0] }""" % (chunk)
 
       def _handleChunkResult(self, res, chunk):
             for x in res:
