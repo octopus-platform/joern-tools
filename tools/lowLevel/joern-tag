@@ -1,4 +1,5 @@
 from joerntools.shelltool.LookupTool import LookupTool
+from py2neo import neo4j
 
 DESCRIPTION = """ """
 
@@ -26,11 +27,15 @@ class JoernTag(LookupTool):
 
     # @Override
     def processBatch(self, pairs):
-        query = """
-        %s._().sideEffect{ g.v(it[0]).%s = it[1] };
-        """ % (pairs, DEFAULT_TAGNAME)
-        self._runGremlinQuery(query)
-
+        
+        batch = neo4j.WriteBatch(self.dbInterface.j.graphDb)
+        
+        for (nodeId, tagVal) in pairs:
+            # FIXME: Need to use the database URL here
+            batch.set_property(neo4j.Node('http://localhost:7474/db/data/node/' + str(nodeId)), DEFAULT_TAGNAME, tagVal)
+        
+        batch.submit()
+        
     def streamEnd(self):
 
         if len(self.inputPairs) != 0:
