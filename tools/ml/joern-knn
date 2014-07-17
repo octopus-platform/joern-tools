@@ -33,6 +33,10 @@ class KNNCLI(PipeTool):
                                     neighbours to those specified in
                                     the provided file.""")
 
+        self.argParser.add_argument('-s', '--svd-k', nargs='?', type=int,
+                                    default = 0,
+                                    help= """Number of dimensions for SVD. If set to 0, SVD is not used.""")
+        
         self.knn = KNN()
         
 
@@ -46,6 +50,7 @@ class KNNCLI(PipeTool):
         else:
             self.knn.setLimitArray([int(x) for x in self.args.limit.readlines()])
         self.knn.setK(self.args.k)
+        self.knn.setSVDk(self.args.svd_k)
         self.knn.setNoCache(self.args.no_cache)
         
         try:

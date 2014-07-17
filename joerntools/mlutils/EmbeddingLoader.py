@@ -3,10 +3,8 @@
 from sklearn.datasets import load_svmlight_file
 from gzip import GzipFile
 from Embedding import *
-import cPickle as pickle
-import os
 
-from sklearn.feature_extraction.text import TfidfTransformer
+import os
 
 LEN_BIN = len(' bin=')
 
@@ -15,14 +13,15 @@ class EmbeddingLoader:
     def __init__(self):
         self.emb = Embedding()
         
-    def load(self, dirname, tfidf = False, svd_k = 0):
+    def load(self, dirname, svd_k = 0):
+        """
+        Load the embedding and optionally perform SVD
+        on load. If svd_k is set to 0, no SVD is performed.
+        """
+        
         self.dirname = dirname
         self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
         
-        if tfidf:
-            tfidf = TfidfTransformer()
-            self.emb.x =  tfidf.fit_transform(self.emb.x)
-
         if svd_k != 0:
             try:
                 import sparsesvd
@@ -32,7 +31,6 @@ class EmbeddingLoader:
                 X = scipy.sparse.csc_matrix(X)
                 Ut, S, Vt = sparsesvd.sparsesvd(X, svd_k)
                 self.emb.x = scipy.sparse.csr_matrix(Vt.T)
-
 
             except ImportError:
                 print 'Warning: Cannot perform SVD without sparsesvd module'
