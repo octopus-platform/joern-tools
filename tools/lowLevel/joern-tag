@@ -1,0 +1,42 @@
+from joerntools.shelltool.LookupTool import LookupTool
+
+DESCRIPTION = """ """
+
+DEFAULT_TAGNAME = 'tag'
+BATCH_SIZE = 1000
+
+class JoernTag(LookupTool):
+    
+    def __init__(self):
+        LookupTool.__init__(self, DESCRIPTION)
+        self.inputPairs = []
+
+    def processLine(self, line):
+         
+       
+         # [nodeId, tagValue]
+         X = line.split('\t')
+         X = [int(X[0]), X[1]]
+         
+         self.inputPairs.append(X)
+         
+         if len(self.inputPairs) == BATCH_SIZE:
+            self.processBatch(self.inputPairs)
+            self.inputPairs = []
+
+    # @Override
+    def processBatch(self, pairs):
+        query = """
+        %s._().sideEffect{ g.v(it[0]).%s = it[1] };
+        """ % (pairs, DEFAULT_TAGNAME)
+        self._runGremlinQuery(query)
+
+    def streamEnd(self):
+
+        if len(self.inputPairs) != 0:
+            self.processBatch(self.inputPairs)
+        
+    
+if __name__ == '__main__':
+    tool = JoernTag()
+    tool.run()

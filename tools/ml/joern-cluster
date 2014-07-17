@@ -37,8 +37,8 @@ class JoernCluster(CmdLineTool):
         i = 0
         for x in fcluster(Z, MAX_DIST_IN_CLUSTER, criterion = 'distance'):
             nodeId = int(self.emb.y[i])
-            # nodeId ' ' clusterId
-            print str(nodeId) + ' ' + str(x)
+            # nodeId '\t clusterId
+            print str(nodeId) + '\t' + str(x)
             i += 1
         
 if __name__ == '__main__':
