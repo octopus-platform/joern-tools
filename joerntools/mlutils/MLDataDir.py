@@ -1,7 +1,7 @@
 
 import os
 
-class EmbeddingDir:
+class MLDataDir:
     
     def __init__(self):
 
@@ -20,7 +20,7 @@ class EmbeddingDir:
 
         datapointFilename = os.path.join(self.dataDir, str(self.curDatapoint))
         f = file(datapointFilename, 'w')
-        f.writelines([x + "\n" for x in symbols])
+        f.writelines([str(x) + "\n" for x in symbols])
         f.close()
         self.curDatapoint += 1
     
