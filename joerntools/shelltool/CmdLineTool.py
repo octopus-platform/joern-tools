@@ -1,5 +1,5 @@
 
-from argparse import ArgumentParser, FileType
+from argparse import ArgumentParser
 
 class CmdLineTool:
     
@@ -11,8 +11,10 @@ class CmdLineTool:
         self.argParser = ArgumentParser(description = self.description)
     
     def run(self):
-        """ Run the tool. Call this function after all additional
-        arguments have been provided """
+        """
+        Run the tool. Call this function after all additional
+        arguments have been provided
+        """
         self._parseCommandLine()
         self._runImpl()
 

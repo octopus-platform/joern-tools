@@ -1,0 +1,46 @@
+#!/usr/bin/env python2
+
+from joerntools.shelltool.CmdLineTool import CmdLineTool
+from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
+
+DESCRIPTION = """ Perform linkage clustering for embedded vectors """
+
+DEFAULT_DIRNAME = 'embedding'
+
+METRIC = 'euclidean'
+MAX_DIST_IN_CLUSTER = 5.0
+METHOD = 'complete'
+
+class JoernCluster(CmdLineTool):
+    
+    def __init__(self):
+        CmdLineTool.__init__(self, DESCRIPTION)
+
+        self.argParser.add_argument('-d', '--dirname', nargs='?',
+                                    type = str, help="""The directory containing the embedding""",
+                                    default = DEFAULT_DIRNAME)
+
+    def _runImpl(self):
+
+        from fastcluster import linkage
+        from scipy.cluster.hierarchy import fcluster
+        from sklearn.metrics.pairwise import pairwise_distances
+        
+        loader = EmbeddingLoader()
+        # Btw, we can have the loader do PCA here by passing
+        # a second argument.
+        self.emb = loader.load(self.args.dirname)
+        
+        D = pairwise_distances(self.emb.x, metric=METRIC)
+        Z = linkage(D, method=METHOD)
+
+        i = 0
+        for x in fcluster(Z, MAX_DIST_IN_CLUSTER, criterion = 'distance'):
+            nodeId = int(self.emb.y[i])
+            # nodeId ' ' clusterId
+            print str(nodeId) + ' ' + str(x)
+            i += 1
+        
+if __name__ == '__main__':
+    tool = JoernCluster()
+    tool.run()
