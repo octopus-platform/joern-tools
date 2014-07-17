@@ -13,7 +13,7 @@ behaviour depends on the node type.
   the specified argument.
 
 - Callees: The forward slice is calculated for all symbols
-  occuring on the left hand side of the assignment (return value), the
+  occurring on the left hand side of the assignment (return value), the
   backward slice is calculated for the statement.
 
 In summary, this allows the following kinds of slices to be extracted: 

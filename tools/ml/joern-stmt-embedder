@@ -17,6 +17,7 @@ class JoernStmtEmbedder(MLDataDirCreator):
     
     
     def _constructQueryForChunk(self, chunk):
+        
         return """
         idListToNodes(%s)
         .transform{ [it.id, NH(NH(NHGraph(it)))[1].values() ] }
