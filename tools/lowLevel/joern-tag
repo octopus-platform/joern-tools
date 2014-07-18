@@ -3,7 +3,7 @@ from py2neo import neo4j
 
 DESCRIPTION = """ """
 
-DEFAULT_TAGNAME = 'tag2'
+DEFAULT_TAGNAME = 'tag'
 BATCH_SIZE = 1000
 
 class JoernTag(LookupTool):
@@ -11,6 +11,8 @@ class JoernTag(LookupTool):
     def __init__(self):
         LookupTool.__init__(self, DESCRIPTION)
         self.inputPairs = []
+
+        # FIXME: Allow different tag-names to be supplied
 
     def processLine(self, line):
          

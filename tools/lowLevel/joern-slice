@@ -2,33 +2,6 @@
 
 from joerntools.shelltool.AccTool import AccTool
 
-"""
-- Both forward and backward slices can be calculated. The exact
-behaviour depends on the node type.
-
-- Statements/Conditions: The slice is calculated for all symbols
-  used/defined by the statement.
-
-- Arguments: The slice is calculated for all symbols used/defined in
-  the specified argument.
-
-- Callees: The forward slice is calculated for all symbols
-  occurring on the left hand side of the assignment (return value), the
-  backward slice is calculated for the statement.
-
-In summary, this allows the following kinds of slices to be extracted: 
-
-- Forward/backward slices considering all symbols
-- Forward slices considering function return values
-- Forward/backward slices for symbols occuring in the i'th argument of
-  calls.
-
-Output format:
-==============
-
-label TAB NodeId_1 ... NodeId_m TAB EdgeId_1 .... EdgeId_n
-"""
-
 DESCRIPTION = """Extracts program slices."""
 
 class SliceTool(AccTool):
