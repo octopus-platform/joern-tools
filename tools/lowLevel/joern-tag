@@ -3,7 +3,7 @@ from py2neo import neo4j
 
 DESCRIPTION = """ """
 
-DEFAULT_TAGNAME = 'tag'
+DEFAULT_TAGNAME = 'tag2'
 BATCH_SIZE = 1000
 
 class JoernTag(LookupTool):
@@ -31,8 +31,12 @@ class JoernTag(LookupTool):
         batch = neo4j.WriteBatch(self.dbInterface.j.graphDb)
         
         for (nodeId, tagVal) in pairs:
-            # FIXME: Need to use the database URL here
-            batch.set_property(neo4j.Node('http://localhost:7474/db/data/node/' + str(nodeId)), DEFAULT_TAGNAME, tagVal)
+	    graphDbURL = self.dbInterface.j.getGraphDbURL()
+            if graphDbURL[-1] == '/': graphDbURL = graphDbURL[:-1]
+	    nodeURL = graphDbURL + '/node/' + str(nodeId)
+            node = neo4j.Node(nodeURL)
+	    
+	    batch.set_property(node, DEFAULT_TAGNAME, tagVal)
         
         batch.submit()
         
