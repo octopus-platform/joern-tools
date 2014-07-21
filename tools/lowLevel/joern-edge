@@ -1,0 +1,34 @@
+
+from joerntools.shelltool.StartTool import StartTool
+from argparse import FileType
+
+DESCRIPTION = """For a set of nodes X, return all edges from nodes in X to nodes in X."""
+
+class JoernEdge(StartTool):
+
+    def __init__(self):
+        StartTool.__init__(self, DESCRIPTION)
+
+        # Add arguments
+        self.argParser.add_argument('nodeFile',
+                                    type = FileType('r'), help="""The file containing node Ids""",
+                                    default = None)
+
+     # @Override
+    def _constructQuery(self):
+        
+        nodeFile = self.args.nodeFile
+        nodeIds = [long(x) for x in nodeFile.readlines()]
+        
+        return "edgesInX(%s)" % (nodeIds)
+        
+
+    # @Override
+    def _handleResult(self, res):
+        for r in res:
+            print r
+        
+if __name__ == '__main__':
+    tool = JoernEdge()
+    tool.run()
+    
