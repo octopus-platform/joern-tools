@@ -25,8 +25,7 @@ class JoernEdge(StartTool):
 
     # @Override
     def _handleResult(self, res):
-        for r in res:
-            print r
+        print ' '.join([str(r) for r in res])
         
 if __name__ == '__main__':
     tool = JoernEdge()
