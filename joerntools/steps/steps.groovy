@@ -6,9 +6,9 @@ Gremlin.defineStep('functionToAPISymbolNodes', [Vertex, Pipe], {
 });
 
 
-Object.metaClass.edgesInX = { X -> 
+Object.metaClass.edgesInX = { X, labels = [] -> 
 	X._().transform{ g.v(it) }
-	.outE()
+	.outE().filter{ labels == [] || labels.contains(it.label) }
 	.filter{
 		p = it.inV().id.toList()[0]
 		X.contains(p)

@@ -8,7 +8,7 @@ DESCRIPTION = """ Perform linkage clustering for embedded vectors """
 DEFAULT_DIRNAME = 'embedding'
 
 METRIC = 'euclidean'
-MAX_DIST_IN_CLUSTER = 5.0
+MAX_DIST_IN_CLUSTER = 4.0
 METHOD = 'complete'
 
 class JoernCluster(CmdLineTool):
