@@ -42,4 +42,5 @@ class MLDataDirCreator(ChunkStartTool):
     def _stop(self):
         self.dataDir.finalize()
         self.embedder = Embedder()
-        self.embedder.embed(self.args.dirname)
+        self.embedder.embed(self.args.dirname, tfidf=False)
+        

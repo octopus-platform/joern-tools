@@ -20,7 +20,7 @@ class JoernStmtEmbedder(MLDataDirCreator):
         
         return """
         idListToNodes(%s)
-        .transform{ [it.id, NH(NH(NHGraph(it)))[1].values() ] }
+        .transform{ labels = NH(NH(NHGraph(it)))[1]; [it.id, labels.values() ] }
         """ % (str(chunk))
     
 if __name__ == '__main__':

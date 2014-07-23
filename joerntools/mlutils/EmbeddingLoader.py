@@ -71,6 +71,7 @@ class EmbeddingLoader:
         filename = self.dirname + TOC_FILENAME
         f = file(filename)
         TOCLines = [x.rstrip() for x in f.readlines()]
+        self.emb.TOCLines = TOCLines
         f.close()
         
         for i in range(len(self.emb.y)):

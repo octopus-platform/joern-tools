@@ -33,10 +33,11 @@ class JoernCluster(CmdLineTool):
         
         D = pairwise_distances(self.emb.x, metric=METRIC)
         Z = linkage(D, method=METHOD)
-
+        
         i = 0
         for x in fcluster(Z, MAX_DIST_IN_CLUSTER, criterion = 'distance'):
-            nodeId = int(self.emb.TOC[int(self.emb.y[i])])
+            label = long(self.emb.y[i])
+            nodeId = long(self.emb.TOCLines[label])
             # nodeId '\t clusterId
             print str(nodeId) + '\t' + str(x)
             i += 1
