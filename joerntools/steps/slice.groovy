@@ -28,7 +28,7 @@ Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbols ->
 			.outV().gather{it}.scatter()
 			.sideEffect{first = false}
 		}.scatter()
-		.loop(4){it.loops < MAX_LOOPS}{true}
+		.loop('x'){it.loops < MAX_LOOPS}{true}
 	).fairMerge()
 	.dedup()
 });
