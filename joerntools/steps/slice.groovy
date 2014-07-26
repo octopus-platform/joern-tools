@@ -2,15 +2,15 @@ Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbols ->
 	 MAX_LOOPS = 5;
   	_()
 	.copySplit(
-		_(),
-		_().transform{
-			it.sideEffect{first = true;}
-			.outE('REACHES', 'CONTROLS')
-			.filter{it.label == 'CONTROLS' || !first || it.var in symbols}
-			.inV().gather{it}.scatter()
-			.sideEffect{first = false}
-			.loop(4){it.loops < MAX_LOOPS}{true}
+	  	_(),
+	  	_().sideEffect{first = true;}.as('x')
+		.transform{
+			  it.outE('REACHES', 'CONTROLS')
+			  .filter{it.label == 'CONTROLS' || !first || it.var in symbols}
+			  .inV().gather{it}.scatter()
+			  .sideEffect{first = false}
 		}.scatter()
+		.loop('x'){it.loops < MAX_LOOPS}{true}
 	).fairMerge()
 	.dedup()
 });
@@ -20,14 +20,15 @@ Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbols ->
 	_()
 	.copySplit(
 		_(),
-		_().transform{
-			it.sideEffect{first = true;}
-			.inE('REACHES', 'CONTROLS')
+		_()
+		.sideEffect{first = true;}.as('x')
+		.transform{
+			it.inE('REACHES', 'CONTROLS')
 			.filter{it.label == 'CONTROLS' || !first || it.var in symbols}
 			.outV().gather{it}.scatter()
 			.sideEffect{first = false}
-			.loop(4){it.loops < MAX_LOOPS}{true}
 		}.scatter()
+		.loop(4){it.loops < MAX_LOOPS}{true}
 	).fairMerge()
 	.dedup()
 });
