@@ -1,0 +1,9 @@
+
+from joerntools.shelltool.JoernTag import JoernTag
+
+class JoernHide(JoernTag):
+    
+    def __init__(self):
+        JoernTag.__init__(self, DESCRIPTION)
+        # self.argParser.add_argument("-t", "--tag", default = DEFAULT_TAGNAME)
+        
