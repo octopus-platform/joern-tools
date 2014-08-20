@@ -1,22 +1,25 @@
-from joerntools.shelltool.LookupTool import LookupTool
+from joerntools.shelltool.TraversalTool import TraversalTool
 from py2neo import neo4j
 
-DESCRIPTION = """ """
+DESCRIPTION = """
+    Adds attributes to nodes. Lines of "nodeId \t tag-value"
+    are expected as input.
+"""
 
 DEFAULT_TAGNAME = 'tag'
 BATCH_SIZE = 1000
 
-class JoernTag(LookupTool):
+class JoernTag(TraversalTool):
     
     def __init__(self):
-        LookupTool.__init__(self, DESCRIPTION)
+        TraversalTool.__init__(self, DESCRIPTION)
+        
+        self.argParser.add_argument("-t", "--tag", default = DEFAULT_TAGNAME)
+        
         self.inputPairs = []
-
-        # FIXME: Allow different tag-names to be supplied
 
     def processLine(self, line):
          
-       
          # [nodeId, tagValue]
          X = line.split('\t')
          X = [int(X[0]), X[1]]
@@ -38,7 +41,7 @@ class JoernTag(LookupTool):
 	    nodeURL = graphDbURL + '/node/' + str(nodeId)
             node = neo4j.Node(nodeURL)
 	    
-	    batch.set_property(node, DEFAULT_TAGNAME, tagVal)
+	    batch.set_property(node, self.args.tag , tagVal)
         
         batch.submit()
         
