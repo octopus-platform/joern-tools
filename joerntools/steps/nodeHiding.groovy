@@ -9,8 +9,10 @@ Gremlin.defineStep('visible', [Vertex, Pipe], {
 			(it.hidden != '1')
 		else if(it.type == 'Function')
 			it.functionToFiles().hidden.toList()[0] != '1'
+		else if( (l = it.functions().functionToFiles().hidden.toList() ) != [])
+			l[0] != '1'
 		else
-			it.functions().functionToFiles().hidden.toList()[0] != '1'
+			true
 	}
 });
 
