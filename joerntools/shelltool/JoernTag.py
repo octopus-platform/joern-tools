@@ -25,8 +25,10 @@ class JoernTag(TraversalTool):
             self.processBatch(self.inputPairs)
             self.inputPairs = []
 
-    # @Override
     def processBatch(self, pairs):
+        self.writePairsToDatabase(pairs, self.args.tag)
+
+    def writePairsToDatabase(self, pairs, tagName):
         
         batch = neo4j.WriteBatch(self.dbInterface.j.graphDb)
         graphDbURL = self.dbInterface.j.getGraphDbURL()
@@ -36,10 +38,11 @@ class JoernTag(TraversalTool):
                     
             nodeURL = graphDbURL + '/node/' + str(nodeId)
             node = neo4j.Node(nodeURL)
-            batch.set_property(node, self.args.tag , tagVal)
+            batch.set_property(node, tagName , tagVal)
         
         batch.submit()
         
+      
     def streamEnd(self):
 
         if len(self.inputPairs) != 0:

@@ -1,9 +1,39 @@
 
 from joerntools.shelltool.JoernTag import JoernTag
 
+DESCRIPTION = """ Hide all nodes beneath directories"""
+BATCH_SIZE = 1000
+
 class JoernHide(JoernTag):
     
-    def __init__(self):
+    def __init__(self, DESCRIPTION):
         JoernTag.__init__(self, DESCRIPTION)
-        # self.argParser.add_argument("-t", "--tag", default = DEFAULT_TAGNAME)
+    
+    def processLine(self, line):
         
+        self.args.tag = 'hidden'
+        
+        newNodeIds = self._getFileIdsForDir(line)
+        newPairs = [[nodeId, '1'] for nodeId in newNodeIds]
+         
+        self.inputPairs.extend(newPairs)
+        
+        while len(self.inputPairs) >= BATCH_SIZE:
+            batch = self.inputPairs[:BATCH_SIZE]
+            
+            self.processBatch(batch)
+            self.inputPairs = self.inputPairs[BATCH_SIZE:]
+
+    
+    def _getFileIdsForDir(self, line):
+        query = """
+        queryNodeIndex("type:File AND filepath:*%s*").id
+        """ % (line)
+        return self._runGremlinQuery(query)
+
+
+if __name__ == '__main__':
+    
+    tool = JoernHide(DESCRIPTION)
+    tool.run()
+    
