@@ -1,5 +1,4 @@
-Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbols ->
-	 MAX_LOOPS = 5;
+Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbols, ORDER = 5 ->
   	_()
 	.copySplit(
 	  	_(),
@@ -10,13 +9,12 @@ Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbols ->
 			  .inV().gather{it}.scatter()
 			  .sideEffect{first = false}
 		}.scatter()
-		.loop('x'){it.loops < MAX_LOOPS}{true}
+		.loop('x'){it.loops < ORDER}{true}
 	).fairMerge()
 	.dedup()
 });
 
-Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbols ->
-	MAX_LOOPS = 5;
+Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbols, ORDER = 5 ->
 	_()
 	.copySplit(
 		_(),
@@ -28,7 +26,7 @@ Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbols ->
 			.outV().gather{it}.scatter()
 			.sideEffect{first = false}
 		}.scatter()
-		.loop('x'){it.loops < MAX_LOOPS}{true}
+		.loop('x'){it.loops < ORDER}{true}
 	).fairMerge()
 	.dedup()
 });
