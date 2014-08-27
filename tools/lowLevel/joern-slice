@@ -23,6 +23,13 @@ class SliceTool(AccTool):
             default = "it.id",
             help = """Traversal for labeling""")
 
+        self.argParser.add_argument(
+            '-k', '--order',
+            action = 'store',
+            default = 5,
+            type = int,
+            help = """The number of hops to follow in the PDG""")
+
     
     def processBatch(self, nodeIds):
 
@@ -60,10 +67,10 @@ class SliceTool(AccTool):
                  symbols = it.statements().out('USE', 'DEF').code.toList()
            }
         }.statements().transform{
-            nodes = it.forwardSlice(symbols).id.toList()
+            nodes = it.forwardSlice(symbols, %d).id.toList()
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
-        """ % (nodeIds, self.args.label)
+        """ % (nodeIds, self.args.label, self.args.order)
         
         return forwardQuery
 
@@ -81,10 +88,10 @@ class SliceTool(AccTool):
                  symbols = it.statements().out('USE', 'DEF').code.toList()
             }
         }.statements().transform{
-            nodes = it.backwardSlice(symbols).id.toList()
+            nodes = it.backwardSlice(symbols, %d).id.toList()
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
-        """ % (nodeIds, self.args.label)
+        """ % (nodeIds, self.args.label, self.args.order)
         
         return backwardQuery
        
