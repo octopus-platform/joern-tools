@@ -9,7 +9,7 @@ Gremlin.defineStep('forwardSlice', [Vertex, Pipe], { symbols, ORDER = 5 ->
 			  .inV().gather{it}.scatter()
 			  .sideEffect{first = false}
 		}.scatter()
-		.loop('x'){it.loops < ORDER}{true}
+		.loop('x'){it.loops <= ORDER}{true}
 	).fairMerge()
 	.dedup()
 });
@@ -26,7 +26,7 @@ Gremlin.defineStep('backwardSlice', [Vertex, Pipe], { symbols, ORDER = 5 ->
 			.outV().gather{it}.scatter()
 			.sideEffect{first = false}
 		}.scatter()
-		.loop('x'){it.loops < ORDER}{true}
+		.loop('x'){it.loops <= ORDER}{true}
 	).fairMerge()
 	.dedup()
 });
