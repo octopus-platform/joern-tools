@@ -97,10 +97,11 @@ Object.metaClass.hashVal = { s ->
 
 Gremlin.defineStep('astLabel', [Vertex, Pipe], { 
 	_().transform{
+
 		if(numChildren(it) != 0 || it.code == null)
 		  hashVal(it.type)
 		else
-		  //  hashVal(it.code)
-		  hashVal('')
+		  hashVal(it.code)
+		  // hashVal('')
 	}
 })

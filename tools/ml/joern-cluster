@@ -2,12 +2,13 @@
 
 from joerntools.shelltool.CmdLineTool import CmdLineTool
 from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
+from scipy.spatial.distance import squareform
 
 DESCRIPTION = """ Perform linkage clustering for embedded vectors """
 
 DEFAULT_DIRNAME = 'embedding'
 
-METRIC = 'euclidean'
+METRIC = 'cityblock'
 MAX_DIST_IN_CLUSTER = 4.0
 METHOD = 'complete'
 
@@ -32,6 +33,7 @@ class JoernCluster(CmdLineTool):
         self.emb = loader.load(self.args.dirname)
         
         D = pairwise_distances(self.emb.x, metric=METRIC)
+        D = squareform(D)
         Z = linkage(D, method=METHOD)
         
         i = 0
