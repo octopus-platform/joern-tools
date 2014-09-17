@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 from joerntools.mlutils.MLDataDirCreator import MLDataDirCreator
+from joerntools.mlutils.pythonEmbedder.PythonEmbedder import Embedder
 
 class JoernStmtEmbedder(MLDataDirCreator):
     
@@ -22,6 +23,11 @@ class JoernStmtEmbedder(MLDataDirCreator):
         idListToNodes(%s)
         .transform{ labels = NH(NH(NHGraph(it)))[1]; [it.id, labels.values() ] }
         """ % (str(chunk))
+    
+    def _stop(self):
+        self.dataDir.finalize()
+        self.embedder = Embedder()
+        self.embedder.embed(self.args.dirname, tfidf=False)
     
 if __name__ == '__main__':
     tool = JoernStmtEmbedder()

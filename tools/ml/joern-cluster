@@ -9,8 +9,8 @@ DESCRIPTION = """ Perform linkage clustering for embedded vectors """
 DEFAULT_DIRNAME = 'embedding'
 
 METRIC = 'cityblock'
-MAX_DIST_IN_CLUSTER = 4.0
-METHOD = 'complete'
+MAX_DIST_IN_CLUSTER = 6.0
+METHOD = 'average'
 
 class JoernCluster(CmdLineTool):
     
@@ -33,7 +33,10 @@ class JoernCluster(CmdLineTool):
         self.emb = loader.load(self.args.dirname)
         
         D = pairwise_distances(self.emb.x, metric=METRIC)
-        D = squareform(D)
+        D = squareform(D, checks=False)
+        # import numpy
+        # numpy.clip(D,0,1,D)
+        
         Z = linkage(D, method=METHOD)
         
         i = 0

@@ -49,7 +49,7 @@ Object.metaClass.NHGraph = { it ->
 	def children = [:]
 	def labels = [:]
 	
-	X = it.astNodes().transform{ [it.id, it.astLabel().toList()[0],
+	def X = it.astNodes().transform{ [it.id, it.astLabel().toList()[0],
 			   it.children().id.toList() ] }.toList()
 	for (x in X){
 		nodeId = x[0]
@@ -70,12 +70,11 @@ Object.metaClass.NHGraph = { it ->
 
 Object.metaClass.NH = { it ->
 	
-	children = it[0]
-	labels = it[1]
-	
-	newLabels = [:]
+	def children = it[0]
+	def labels = it[1]
+	def newLabels = [:]
 
-	nodeIds = children.keySet()
+	def nodeIds = children.keySet()
 	
 	for(nodeId in nodeIds){
 		nodeLabel = labels[nodeId]
@@ -97,11 +96,14 @@ Object.metaClass.hashVal = { s ->
 
 Gremlin.defineStep('astLabel', [Vertex, Pipe], { 
 	_().transform{
-
+		
 		if(numChildren(it) != 0 || it.code == null)
 		  hashVal(it.type)
-		else
-		  hashVal(it.code)
-		  // hashVal('')
-	}
+		else{
+			if(it.type == 'PrimaryExpression' && it.code.matches('[0-9]+'))
+				return hashVal('A_NUMBER')
+			
+			hashVal(it.code)
+			}
+		}
 })
