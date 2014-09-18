@@ -44,12 +44,12 @@ Object.metaClass.libsvmString = { vec ->
  from an AST root node
 */
 
-Object.metaClass.NHGraph = { it, normMap = [:] ->
+Object.metaClass.NHGraph = { it ->
 	
 	def children = [:]
 	def labels = [:]
 	
-	def X = it.astNodes().transform{ [it.id, it.astLabel(normMap).toList()[0],
+	def X = it.astNodes().transform{ [it.id, it.astLabel().toList()[0],
 			   it.children().id.toList() ] }.toList()
 	for (x in X){
 		nodeId = x[0]
@@ -94,13 +94,8 @@ Object.metaClass.hashVal = { s ->
 	s.hashCode() & LABEL_MASK
 }
 
-Gremlin.defineStep('astLabel', [Vertex, Pipe], { normMap = [:] ->
+Gremlin.defineStep('astLabel', [Vertex, Pipe], {
 	_().transform{
-		
-		if(normMap.size() != 0){
-			if(normMap.containsKey(it.code))
-				return hashVal(normMap[(it.code)])
-		}
 		
 		if(numChildren(it) != 0 || it.code == null)
 		  hashVal(it.type)
