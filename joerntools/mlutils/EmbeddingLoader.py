@@ -20,7 +20,11 @@ class EmbeddingLoader:
         """
         
         self.dirname = dirname
-        self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
+        
+        try:
+            self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
+        except ValueError:
+            return None
         
         if svd_k != 0:
             try:

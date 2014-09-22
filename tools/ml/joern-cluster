@@ -31,6 +31,9 @@ class JoernCluster(CmdLineTool):
         # Btw, we can have the loader do PCA here by passing
         # a second argument.
         self.emb = loader.load(self.args.dirname)
+        if self.emb == None:
+            return
+        
         
         D = pairwise_distances(self.emb.x, metric=METRIC)
         D = squareform(D, checks=False)
