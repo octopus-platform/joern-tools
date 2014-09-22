@@ -73,7 +73,7 @@ Object.metaClass.NH = { it ->
 	def children = it[0]
 	def labels = it[1]
 	def newLabels = [:]
-
+	
 	def nodeIds = children.keySet()
 	
 	for(nodeId in nodeIds){
@@ -82,7 +82,7 @@ Object.metaClass.NH = { it ->
 		c = children[nodeId]
 		newLabels[nodeId] = c.inject(rotNodeLabel) { acc, val -> acc ^ labels[val] }
 	}
-
+	
 	[children, newLabels]
 }
 

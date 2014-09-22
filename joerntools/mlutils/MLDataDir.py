@@ -21,7 +21,7 @@ class MLDataDir:
 
     def addDataPoint(self, funcId, symbols):
         
-        self.toc.write("%d\n" % (funcId))
+        self.toc.write("%s\n" % (funcId))
 
         datapointFilename = os.path.join(self.dataDir, str(self.curDatapoint))
         f = file(datapointFilename, 'w')
