@@ -9,7 +9,7 @@ DESCRIPTION = """ Perform linkage clustering for embedded vectors """
 DEFAULT_DIRNAME = 'embedding'
 
 METRIC = 'cityblock'
-MAX_DIST_IN_CLUSTER = 4.0
+MAX_DIST_IN_CLUSTER = 2.0
 METHOD = 'average'
 
 class JoernCluster(CmdLineTool):
@@ -40,7 +40,16 @@ class JoernCluster(CmdLineTool):
         # import numpy
         # numpy.clip(D,0,1,D)
         
-        Z = linkage(D, method=METHOD)
+        try:
+            Z = linkage(D, method=METHOD)
+        except:
+            # If clustering fails, just put
+            # each datapoint into its own cluster.
+            for i in range(len(self.emb.y)):
+                label = long(self.emb.y[i])
+                nodeId = self.emb.TOCLines[label]
+                print str(nodeId) + '\t' + str(i + 1)
+            return
         
         i = 0
         for x in fcluster(Z, MAX_DIST_IN_CLUSTER, criterion = 'distance'):
