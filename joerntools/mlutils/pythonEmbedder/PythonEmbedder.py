@@ -39,12 +39,15 @@ class Embedder:
     def _outputInLIBSVMFormat(self, directory):
         
         from scipy.sparse import csc_matrix
+        
+        if self.termDocMatrix.matrix == None: return
+
         m =  csc_matrix(self.termDocMatrix.matrix)
         nCols = m.shape[1]
         
         outFilename = os.path.join(directory, 'embedding.libsvm')
         outFile = file(outFilename, 'w')
-        
+
         for i in xrange(nCols):
             label = self.termDocMatrix.index2Doc[i] 
             

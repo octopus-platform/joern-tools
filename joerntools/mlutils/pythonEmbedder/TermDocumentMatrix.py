@@ -15,8 +15,9 @@ class TermDocumentMatrix():
         self.nterms = 0
     
     def setDimensions(self, h, w):
-        self.matrix = lil_matrix((h, w))
-    
+        if (h,w) != (0,0):
+            self.matrix = lil_matrix((h, w))
+
     def setDocuments(self, docs):
         self.index2Doc = docs
         for i in xrange(len(self.index2Doc)):
@@ -28,6 +29,7 @@ class TermDocumentMatrix():
         self.nterms += 1
 
     def incCoefficient(self, i, j, n):
+        if self.matrix == None: return
         self.matrix[self.term2Index[i],j] += n
 
     def isTermKnown(self, term):
@@ -37,6 +39,9 @@ class TermDocumentMatrix():
         
         m = self.matrix
         
+        if m == None:
+            return
+
         # TF
         # d = [1.0/x if x != 0 else 0.0 for x in m.sum(0).tolist()[0]]
         # dia = dia_matrix((d, [0]), shape=(len(d), len(d)))
