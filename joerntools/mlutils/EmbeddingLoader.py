@@ -23,7 +23,7 @@ class EmbeddingLoader:
         
         try:
             self.emb.x, self.emb.y = load_svmlight_file(dirname + EMBEDDING_FILENAME)
-        except ValueError:
+        except (ValueError, IOError):
             return None
         
         if svd_k != 0:
