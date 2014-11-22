@@ -54,7 +54,7 @@ class AST(JoernTool):
     
     def _attributesAsString(self, n):
         
-        properties = n.__metadata__['data']
+        properties = n.properties
         return '\n'.join(['%s:%s' % (k, str(v).replace('\n',' '))
                           for (k,v) in properties.iteritems()])
         
