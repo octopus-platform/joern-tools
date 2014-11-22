@@ -77,6 +77,7 @@ class LookupTool(TraversalTool):
             return
 
         id, node = record
+        node = node.properties
         
         if type(node) == list:
             keys = self.args.attributes
