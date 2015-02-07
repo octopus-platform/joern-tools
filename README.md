@@ -3,7 +3,7 @@ joern-tools
 
 Some simple code analysis tools build on top of joern.
 
-Dependencies
+Installation
 ===
 
-pygraphviz
+See the installation instructions [here](http://joern.readthedocs.org/en/latest/installation.html#installing-joern-tools).
