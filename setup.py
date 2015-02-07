@@ -24,7 +24,7 @@ setup(
     packages = find_packages(),
     package_data={"joerntools": ['steps/*',]},
     scripts = getScripts(),
-    install_requires = ['joern >= 0.1', 'pygraphviz'],
+    install_requires = ['joern >= 0.1', 'pygraphviz', 'chardet'],
     dependency_links = ['https://github.com/fabsx00/python-joern/tarball/master/#egg=joern-0.1'],
     zip_safe = False
 )
