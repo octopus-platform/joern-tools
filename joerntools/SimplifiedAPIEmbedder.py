@@ -4,13 +4,17 @@ from joerntools.mlutils.pythonEmbedder.FeatureArray import FeatureArray
 from joerntools.mlutils.pythonEmbedder.FeatureArrayToMatrix import FeatureArrayToMatrix
 
 """
+Contributed by @yangke:
+
 For a given output directory, generate a TOC File,
 create an APISymbol embedding in libsvm format and save it
 as "embedding.libsvm" in the output directory. where the TOC File
 records a list of the functionIds in a coresponding order 
 with the file:"embedding.libsvm". 
-Unlike other disk writing embedder, this embedder does not generate the APISymbol features.
-So it may provide a better performance for apps which are only focusing on the similarity between functions.
+Unlike the other disk writing embedder, this embedder does not
+generate the APISymbol features. So it may provide a better
+performance for programs which are only focusing on the similarity
+between functions.
 """
 
 class APIEmbedder(object):
