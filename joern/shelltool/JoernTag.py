@@ -1,4 +1,4 @@
-from joerntools.shelltool.TraversalTool import TraversalTool
+from joern.shelltool.TraversalTool import TraversalTool
 from py2neo import neo4j
 
 DEFAULT_TAGNAME = 'tag'

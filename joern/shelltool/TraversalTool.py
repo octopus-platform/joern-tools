@@ -1,6 +1,6 @@
 
 from PipeTool import PipeTool
-from joerntools.shelltool.JoernTool import JoernTool
+from joern.shelltool.JoernTool import JoernTool
 
 class TraversalTool(JoernTool):
     

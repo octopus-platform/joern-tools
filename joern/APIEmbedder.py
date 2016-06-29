@@ -1,8 +1,8 @@
-from joerntools.DBInterface import DBInterface
-# from joerntools.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder
+from joern.DBInterface import DBInterface
+# from joern.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder
 
 import os
-from joerntools.mlutils.pythonEmbedder.PythonEmbedder import Embedder
+from joern.mlutils.pythonEmbedder.PythonEmbedder import Embedder
 
 class APIEmbedder(object):
     

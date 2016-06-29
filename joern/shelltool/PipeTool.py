@@ -1,7 +1,7 @@
 
 import sys
 
-from joerntools.shelltool.CmdLineTool import CmdLineTool
+from joern.shelltool.CmdLineTool import CmdLineTool
 from argparse import FileType
 
 """ A Unix-style pipe tool, which reads from stdin if it is not a

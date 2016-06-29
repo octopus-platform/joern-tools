@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.LookupTool import LookupTool
+from joern.shelltool.LookupTool import LookupTool
 
 DESCRIPTION = """Accumlator tool that runs queries in batches"""
 

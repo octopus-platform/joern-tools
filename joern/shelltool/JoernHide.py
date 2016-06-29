@@ -1,4 +1,4 @@
-from joerntools.shelltool.JoernTag import JoernTag
+from joern.shelltool.JoernTag import JoernTag
 
 BATCH_SIZE = 1000
 

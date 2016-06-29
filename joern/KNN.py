@@ -1,5 +1,5 @@
 
-from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
+from joern.mlutils.EmbeddingLoader import EmbeddingLoader
 from sklearn.metrics.pairwise import pairwise_distances
 
 

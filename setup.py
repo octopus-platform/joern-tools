@@ -13,19 +13,18 @@ def getScripts():
     return x
 
 setup(
-    name = "joerntools",
-    version = "0.1",
+    name = "joern",
+    version = "0.2",
     author = "Fabian Yamaguchi",
-    author_email = "fyamagu@gwdg.de",
+    author_email = "f.yamaguchi@tu-braunschweig.de",
     description = "Tools for code analysis based on joern.",
     license = "GPLv3",
-    url = "http://github.com/fabsx00/joern-tools/",
+    url = "http://github.com/octopus-tools/joern-tools/",
     long_description = read('README.md'),
     packages = find_packages(),
-    package_data={"joerntools": ['steps/*',]},
+    package_data={"joern": ['steps/*',]},
     scripts = getScripts(),
-    install_requires = ['joern >= 0.1', 'pygraphviz', 'chardet'],
-    dependency_links = ['https://github.com/fabsx00/python-joern/tarball/master/#egg=joern-0.1'],
+    install_requires = ['pyorient', 'pygraphviz', 'chardet'],
+    dependency_links = ['https://github.com/octopus-platform/pyorient/tarball/master/#egg=pyorient'],
     zip_safe = False
 )
-

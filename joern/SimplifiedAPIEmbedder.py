@@ -1,7 +1,7 @@
 import os
-from joerntools.DBInterface import DBInterface
-from joerntools.mlutils.pythonEmbedder.FeatureArray import FeatureArray
-from joerntools.mlutils.pythonEmbedder.FeatureArrayToMatrix import FeatureArrayToMatrix
+from joern.DBInterface import DBInterface
+from joern.mlutils.pythonEmbedder.FeatureArray import FeatureArray
+from joern.mlutils.pythonEmbedder.FeatureArrayToMatrix import FeatureArrayToMatrix
 
 """
 Contributed by @yangke:

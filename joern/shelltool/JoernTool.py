@@ -1,6 +1,6 @@
 
-from joerntools.shelltool.PipeTool import PipeTool
-from joerntools.DBInterface import DBInterface
+from joern.shelltool.PipeTool import PipeTool
+from joern.DBInterface import DBInterface
 
 class JoernTool(PipeTool):
     

@@ -1,5 +1,5 @@
 
-from joerntools.shelltool.PipeTool import PipeTool
+from joern.shelltool.PipeTool import PipeTool
 from pygraphviz import AGraph
 
 class GraphvizTool(PipeTool):

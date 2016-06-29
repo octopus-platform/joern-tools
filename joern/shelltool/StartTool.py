@@ -5,8 +5,8 @@ outputs results. This is different from a PipeTool as StartTool can
 only occur at the beginning of a chain.
 """
 
-from joerntools.DBInterface import DBInterface
-from joerntools.shelltool.CmdLineTool import CmdLineTool
+from joern.DBInterface import DBInterface
+from joern.shelltool.CmdLineTool import CmdLineTool
 
 class StartTool(CmdLineTool):
     

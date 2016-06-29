@@ -5,8 +5,8 @@ outputs results. In contrast to StartTool, this tool performs chunking
 to increase performance.
 """
 
-from joerntools.DBInterface import DBInterface
-from joerntools.shelltool.CmdLineTool import CmdLineTool
+from joern.DBInterface import DBInterface
+from joern.shelltool.CmdLineTool import CmdLineTool
 
 CHUNK_SIZE = 256
 
