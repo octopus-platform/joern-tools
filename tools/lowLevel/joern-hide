@@ -1,5 +1,5 @@
 
-from joerntools.shelltool.JoernHide import JoernHide
+from joern.shelltool.JoernHide import JoernHide
 
 DESCRIPTION = """ Hide all nodes beneath directories"""
 

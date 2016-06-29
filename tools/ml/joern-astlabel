@@ -2,7 +2,7 @@
 
 DESCRIPTION = """Labels AST nodes according to a labeling scheme. """
 
-from joerntools.shelltool.GraphvizTool import GraphvizTool
+from joern.shelltool.GraphvizTool import GraphvizTool
 
 class ASTLabel(GraphvizTool):
     

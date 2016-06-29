@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.CmdLineTool import CmdLineTool
-from joerntools.mlutils.EmbeddingLoader import EmbeddingLoader
+from joern.shelltool.CmdLineTool import CmdLineTool
+from joern.mlutils.EmbeddingLoader import EmbeddingLoader
 from scipy.spatial.distance import squareform
 
 DESCRIPTION = """ Perform linkage clustering for embedded vectors """

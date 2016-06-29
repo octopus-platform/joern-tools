@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.AccTool import AccTool
+from joern.shelltool.AccTool import AccTool
 
 DESCRIPTION = """Extracts program slices."""
 

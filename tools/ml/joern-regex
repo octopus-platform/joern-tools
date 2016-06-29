@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.CmdLineTool import CmdLineTool
-from joerntools.mlutils.regexGen.StringSetToRegex import StringSetToRegex
+from joern.shelltool.CmdLineTool import CmdLineTool
+from joern.mlutils.regexGen.StringSetToRegex import StringSetToRegex
 
 from argparse import FileType
 import sys

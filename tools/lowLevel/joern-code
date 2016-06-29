@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 
 import sys, argparse
-from joerntools.view.ParseLocationString import parseLocationOrFail
-from joerntools.shelltool.PipeTool import PipeTool
+from joern.view.ParseLocationString import parseLocationOrFail
+from joern.shelltool.PipeTool import PipeTool
 
 import codecs
 import chardet

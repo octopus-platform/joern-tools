@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
-from joerntools.mlutils.MLDataDirCreator import MLDataDirCreator
-from joerntools.mlutils.pythonEmbedder.PythonEmbedder import Embedder
+from joern.mlutils.MLDataDirCreator import MLDataDirCreator
+from joern.mlutils.pythonEmbedder.PythonEmbedder import Embedder
 
 class JoernStmtEmbedder(MLDataDirCreator):
     

@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.ChunkStartTool import ChunkStartTool
+from joern.shelltool.ChunkStartTool import ChunkStartTool
 
 DESCRIPTION = """Create a list of all functions of the code base. The
 first field is the function's name, the second field is the id of the

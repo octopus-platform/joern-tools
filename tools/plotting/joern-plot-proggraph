@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.JoernTool import JoernTool
+from joern.shelltool.JoernTool import JoernTool
 import pygraphviz as pgv
 
 DESCRIPTION = """Retrieve a graph representation of a function with the given

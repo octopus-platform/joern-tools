@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from joerntools.shelltool.GraphvizTool import GraphvizTool
+from joern.shelltool.GraphvizTool import GraphvizTool
 
 DESCRIPTION = """Extracts features from an AST."""
 
