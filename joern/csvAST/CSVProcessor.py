@@ -1,5 +1,5 @@
 import csv
-from CSVRowAccessors import getCSVRowType
+from joern.csvAST.CSVRowAccessors import getCSVRowType
 
 class CSVProcessor:
     def __init__(self):

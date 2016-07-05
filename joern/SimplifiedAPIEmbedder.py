@@ -1,7 +1,9 @@
 import os
-from joern.DBInterface import DBInterface
-from joern.mlutils.pythonEmbedder.FeatureArray import FeatureArray
-from joern.mlutils.pythonEmbedder.FeatureArrayToMatrix import FeatureArrayToMatrix
+from octopus.server.DBInterface import DBInterface
+
+from octopus.mlutils.pythonEmbedder.FeatureArray import FeatureArray
+from octopus.mlutils.pythonEmbedder.FeatureArrayToMatrix import FeatureArrayToMatrix
+
 
 """
 Contributed by @yangke:
@@ -52,7 +54,7 @@ class APIEmbedder(object):
             raise
         os.makedirs(directory)
         self.tocFilename = os.path.join(directory, 'TOC')
-        self.toc = file(self.tocFilename, 'w')
+        self.toc = open(self.tocFilename, 'w')
         
     def _finalizeOutputDirectory(self):
         self.toc.close()
@@ -78,7 +80,7 @@ class APIEmbedder(object):
         return result
 
     def chunks(self, l, n):
-        for i in xrange(0, len(l), n):
+        for i in range(0, len(l), n):
             yield l[i:i+n]
     
     def _runGremlinQuery(self, query):
@@ -109,9 +111,9 @@ class APIEmbedder(object):
         nCols = m.shape[1]
         
         outFilename = os.path.join(directory, 'embedding.libsvm')
-        outFile = file(outFilename, 'w')
+        outFile = open(outFilename, 'w')
 
-        for i in xrange(nCols):
+        for i in range(nCols):
             label = self.termDocMatrix.index2Doc[i] 
             
             col = m.getcol(i)

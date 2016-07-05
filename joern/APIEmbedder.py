@@ -1,8 +1,7 @@
-from joern.DBInterface import DBInterface
-# from joern.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder
+from octopus.server.DBInterface import DBInterface
 
 import os
-from joern.mlutils.pythonEmbedder.PythonEmbedder import Embedder
+from octopus.mlutils.pythonEmbedder.PythonEmbedder import Embedder
 
 class APIEmbedder(object):
     

@@ -1,6 +1,5 @@
 #!/usr/bin/env python2
 
-import sys
 from joern.shelltool.AccTool import AccTool
 
 DESCRIPTION = """Lookup the location of a node in the code."""

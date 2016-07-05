@@ -6,7 +6,7 @@ def parseLocationOrFail(line):
         x = parseLocationString(line)
         (filename, startLine, startPos, startIndex, stopIndex) = x
     except ValueError:
-        print 'Invalid location line.'
+        print('Invalid location line.')
         sys.exit()
     return x
 

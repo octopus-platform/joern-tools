@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 
 from joern.shelltool.LookupTool import LookupTool
-from argparse import FileType
 
 DESCRIPTION = """For a set of nodes X, return all edges from nodes in X to nodes in X."""
 

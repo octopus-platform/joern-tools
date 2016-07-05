@@ -1,9 +1,8 @@
 
-from joern.shelltool.ChunkStartTool import ChunkStartTool
-from joern.mlutils.MLDataDir import MLDataDir
-from joern.mlutils.pythonEmbedder.PythonEmbedder import Embedder
-# from joern.mlutils.sallyEmbedder.SallyBasedEmbedder import SallyBasedEmbedder as Embedder
 from argparse import FileType
+from octopus.shelltool.ChunkStartTool import ChunkStartTool
+from octopus.mlutils.MLDataDir import MLDataDir
+from octopus.mlutils.pythonEmbedder.PythonEmbedder import Embedder
 
 DESCRIPTION = """ """
 

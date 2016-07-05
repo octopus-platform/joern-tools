@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-from joern.shelltool.AccTool import AccTool
+from octopus.shelltool.AccTool import AccTool
 
 DESCRIPTION = """ inject lines into database query """
 

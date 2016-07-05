@@ -1,5 +1,5 @@
 
-from csvAST.PythonASTProcessor import PythonASTProcessor
+from joern.csvAST.PythonASTProcessor import PythonASTProcessor
 
 class ASTPrinter(PythonASTProcessor):
     

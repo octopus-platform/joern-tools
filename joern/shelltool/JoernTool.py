@@ -1,6 +1,7 @@
 
-from joern.shelltool.PipeTool import PipeTool
-from joern.DBInterface import DBInterface
+from octopus.server.DBInterface import DBInterface
+from octopus.shelltool.PipeTool import PipeTool
+
 
 class JoernTool(PipeTool):
     

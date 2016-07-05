@@ -1,6 +1,6 @@
-from csvAST.CSVProcessor import CSVProcessor
-from csvAST.CSVRowAccessors import getCSVRowLevel
-from csvAST.PythonASTTreeNode import PythonASTTreeNode
+from joern.csvAST.CSVProcessor import CSVProcessor
+from joern.csvAST.CSVRowAccessors import getCSVRowLevel
+from joern.csvAST.PythonASTTreeNode import PythonASTTreeNode
 
 """
 A CSVProcessor which converts an AST in CSV format to an internal

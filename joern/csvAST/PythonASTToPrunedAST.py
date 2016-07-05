@@ -1,6 +1,6 @@
-from csvAST.PythonASTTreeNode import PythonASTTreeNode
-from csvAST.PythonASTProcessor import PythonASTProcessor
-from csvAST.CSVRowAccessors import ROW_TYPE
+from joern.csvAST.PythonASTTreeNode import PythonASTTreeNode
+from joern.csvAST.PythonASTProcessor import PythonASTProcessor
+from joern.csvAST.CSVRowAccessors import ROW_TYPE
 
 PRUNED = 'pruned'
 prunedRow = [PRUNED, '(*)', '(*)', '(*)', '']

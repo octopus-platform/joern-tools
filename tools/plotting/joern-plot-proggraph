@@ -1,7 +1,8 @@
 #!/usr/bin/env python2
 
-from joern.shelltool.JoernTool import JoernTool
 import pygraphviz as pgv
+from joern.shelltool.JoernTool import JoernTool
+
 
 DESCRIPTION = """Retrieve a graph representation of a function with the given
 id. The default output format is graphviz's 'dot'.

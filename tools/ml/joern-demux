@@ -1,7 +1,8 @@
 #!/usr/bin/env python2
 
-import sys, os
+import os
 from joern.shelltool.DemuxTool import DemuxTool
+
 
 DESCRIPTION = """Split file into different files using the first field
 of each line as a key and create a table of contents. This is like

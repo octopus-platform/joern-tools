@@ -1,4 +1,4 @@
-from CSVRowAccessors import CODE
+from joern.csvAST.CSVRowAccessors import CODE
 import sys
 
 class PythonASTTreeNode():

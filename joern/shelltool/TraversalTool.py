@@ -1,5 +1,4 @@
 
-from PipeTool import PipeTool
 from joern.shelltool.JoernTool import JoernTool
 
 class TraversalTool(JoernTool):
