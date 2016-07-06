@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 from octopus.server.DBInterface import DBInterface
 from octopus.shelltool.GraphvizTool import GraphvizTool
@@ -11,7 +11,7 @@ DESCRIPTION = """Highlights the program slice of the given slicing criterion
 SLICE_NODE_COLOR = 'lightblue4'
 
 class ProgramSlice(GraphvizTool):
-    
+
     def __init__(self):
 
         GraphvizTool.__init__(self, DESCRIPTION)
@@ -61,10 +61,10 @@ class ProgramSlice(GraphvizTool):
     def _connectToDatabase(self):
         self.dbInterface = DBInterface()
         self.dbInterface.connectToDatabase()
-    
+
     def _runGremlinQuery(self, query):
         return self.dbInterface.runGremlinQuery(query)
-    
+
 
 if __name__ == '__main__':
     tool = ProgramSlice()

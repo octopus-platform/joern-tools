@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 from joern.shelltool.AccTool import AccTool
 
@@ -9,7 +9,7 @@ class SliceTool(AccTool):
 
     def __init__(self, DESCRIPTION):
         AccTool.__init__(self, DESCRIPTION)
-        
+
         self.argParser.add_argument(
             '-s', '--slice-direction',
             action = 'store',
@@ -30,26 +30,26 @@ class SliceTool(AccTool):
             type = int,
             help = """The number of hops to follow in the PDG""")
 
-    
+
     def processBatch(self, nodeIds):
 
         query = self._createQueryForNode(nodeIds)
-        
+
         for (seedPointId, nodeIds, edgeIds) in self._runGremlinQuery(query):
-            
+
             nodeIdStr = ' '.join([str(x) for x in nodeIds])
             edgeIdStr = ' '.join([str(x) for x in edgeIds])
 
             self.output(str(seedPointId) + "\t" + nodeIdStr + "\t" + edgeIdStr + "\n")
-        
+
     def _createQueryForNode(self, nodeIds):
         if self.args.slice_direction == 'forward':
             return self._createForwardQueryForNode(nodeIds)
         else:
             return self._createBackwardQueryForNode(nodeIds)
-    
+
     def _createForwardQueryForNode(self, nodeIds):
-        
+
         forwardQuery = """
         idListToNodes(%s)
         .sideEffect
@@ -57,10 +57,10 @@ class SliceTool(AccTool):
            seedNodeId = %s;
 
            if(it.type == 'Callee'){
-        
-    		symbols = it.matchParents{it.type == 'AssignmentExpr'}
-			  .lval().code.toList()
-        
+
+                symbols = it.matchParents{it.type == 'AssignmentExpr'}
+                          .lval().code.toList()
+
            } else if(it.type == 'Argument'){
                  symbols = it.defines().code.toList()
            } else{
@@ -71,11 +71,11 @@ class SliceTool(AccTool):
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
         """ % (nodeIds, self.args.label, self.args.order)
-        
+
         return forwardQuery
 
     def _createBackwardQueryForNode(self, nodeIds):
-        
+
         backwardQuery = """
         idListToNodes(%s)
         .sideEffect
@@ -92,9 +92,9 @@ class SliceTool(AccTool):
             [seedNodeId, nodes, idListToNodes(nodes).outE().id.toList() ]
         }
         """ % (nodeIds, self.args.label, self.args.order)
-        
+
         return backwardQuery
-       
+
 if __name__ == '__main__':
     tool = SliceTool(DESCRIPTION)
     tool.run()
