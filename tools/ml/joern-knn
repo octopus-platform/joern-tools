@@ -66,7 +66,7 @@ class KNNCLI(PipeTool):
         try:
             neighbors = self.knn.getNeighborsFor(line)
             for n in neighbors:
-                print n
+                print(n)
         except KeyError:
             sys.stderr.write('Warning: no data point found for %s\n' %
                              (line))

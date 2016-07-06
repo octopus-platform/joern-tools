@@ -24,7 +24,6 @@ setup(
     packages = find_packages(),
     package_data={"joern": ['steps/*',]},
     scripts = getScripts(),
-    install_requires = ['pyorient', 'pygraphviz', 'chardet'],
-    dependency_links = ['https://github.com/octopus-platform/pyorient/tarball/master/#egg=pyorient'],
+    install_requires = ['pygraphviz', 'chardet'],
     zip_safe = False
 )

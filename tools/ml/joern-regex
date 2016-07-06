@@ -33,7 +33,7 @@ class JoernRegex(CmdLineTool):
         M = [s.rstrip('\n') for s in M]
         
         converter = StringSetToRegex()
-        print converter.convert(M, X)
+        print(converter.convert(M, X))
 
 
 if __name__ == '__main__':
