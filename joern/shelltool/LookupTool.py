@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 from joern.shelltool.TraversalTool import TraversalTool
 
@@ -26,6 +26,13 @@ class LookupTool(TraversalTool):
                                     nargs='+', type = str,
                                     help="""Attributes of interest""",
                                     default = [])
+        self.argParser.add_argument('project')
+
+
+    # @Override
+    def streamStart(self):
+        self.setDBName(self.args.project)
+        super().streamStart()
 
     # @Override
     def queryFromLine(self, line):
