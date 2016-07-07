@@ -8,14 +8,12 @@ class JoernTool(PipeTool):
     def __init__(self, DESCRIPTION):
         PipeTool.__init__(self, DESCRIPTION)
         self.dbName = None
-
-    def setDBName(self, dbName):
-        self.dbName = dbName
+        self.argParser.add_argument('project')
 
     # @Override
     def streamStart(self):
         self.dbInterface = DBInterface()
-        self.dbInterface.connectToDatabase(self.dbName)
+        self.dbInterface.connectToDatabase(self.args.project)
     
     def _runGremlinQuery(self, query):
         return self.dbInterface.runGremlinQuery(query)

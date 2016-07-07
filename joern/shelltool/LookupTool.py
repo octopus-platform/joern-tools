@@ -26,13 +26,6 @@ class LookupTool(TraversalTool):
                                     nargs='+', type = str,
                                     help="""Attributes of interest""",
                                     default = [])
-        self.argParser.add_argument('project')
-
-
-    # @Override
-    def streamStart(self):
-        self.setDBName(self.args.project)
-        super().streamStart()
 
     # @Override
     def queryFromLine(self, line):

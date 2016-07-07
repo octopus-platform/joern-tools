@@ -5,7 +5,7 @@ class TraversalTool(JoernTool):
     
     def __init__(self, DESCRIPTION):
         JoernTool.__init__(self, DESCRIPTION)
-    
+
     # @Override
     def processLine(self, line):
         query = self.queryFromLine(line)
