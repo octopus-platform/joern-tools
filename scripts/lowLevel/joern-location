@@ -21,11 +21,11 @@ class Location(AccTool):
         # For Symbols, get location of function
 
         query = """idListToNodes(%s)
-        .ifThenElse{it.type == 'Function'}{
-         it.sideEffect{loc = it.location; }.functionToFile()
-         .sideEffect{filename = it.filepath; }
+        .ifThenElse{it.nodeType == 'Function'}{
+         it.sideEffect{ loc = it.location; }.functionToFile()
+         .sideEffect{ filename = it.filepath; }
          }{
-           it.ifThenElse{it.type == 'Symbol'}
+           it.ifThenElse{it.nodeType == 'Symbol'}
            {
              it.transform{ g.v(it.functionId) }.sideEffect{loc = it.location; }
              .functionToFile()
