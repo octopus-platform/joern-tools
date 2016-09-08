@@ -48,7 +48,6 @@ class ProgramGraph(JoernTool):
         G = pgv.AGraph(directed=True, strict=False)
         self._addNodes(G, nodes)
         self._addEdges(G, edges)
-
         self._outputGraph(G, line)
 
     def streamStart(self):
